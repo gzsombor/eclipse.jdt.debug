@@ -36,6 +36,43 @@ public interface IJavaStackFrame extends IStackFrame, IJavaModifiers,
 		IFilteredStep, IDropToFrame {
 
 	/**
+	 * Categorization of the stack frame.
+	 *
+	 * @since 3.22
+	 *
+	 */
+	enum Category {
+		/**
+		 * The user specified a filter, can be used for highlighting specific, very important code layers.
+		 */
+		CUSTOM_FILTERED,
+		/**
+		 * The stack frame represents a synthetic function call, which is not based on actual Java source code.
+		 */
+		SYNTHETIC,
+		/**
+		 * Methods in classes that considered as platform, like code in 'java.*' packages.
+		 */
+		PLATFORM,
+		/**
+		 * Classes found in a test source folder in the project.
+		 */
+		TEST,
+		/**
+		 * Classes found in a non-test source folder in the project.
+		 */
+		PRODUCTION,
+		/**
+		 * Classes coming from a library, not from the actual project.
+		 */
+		LIBRARY,
+		/**
+		 * Classes with unknown origin.
+		 */
+		UNKNOWN
+	}
+
+	/**
 	 * Status code indicating a stack frame is invalid. A stack frame becomes
 	 * invalid when the thread containing the stack frame resumes. A stack frame
 	 * may or may not be valid if the thread subsequently suspends, depending on
@@ -533,4 +570,18 @@ public interface IJavaStackFrame extends IStackFrame, IJavaModifiers,
 	 * @since 3.3
 	 */
 	public void forceReturn(IJavaValue value) throws DebugException;
+
+	/**
+	 * @since 3.22
+	 * @param category
+	 *            the new category of the stack frame.
+	 */
+	public void setCategory(Category category);
+
+	/**
+	 * @since 3.22
+	 * @return the category of the stack frame, null if it's not yet categorized.
+	 */
+	public Category getCategory();
+
 }
