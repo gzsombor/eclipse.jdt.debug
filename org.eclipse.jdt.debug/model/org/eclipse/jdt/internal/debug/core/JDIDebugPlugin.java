@@ -119,6 +119,38 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 			.getUniqueIdentifier() + ".enable_advanced_sourcelookup"; //$NON-NLS-1$
 
 	/**
+	 * List of active filters for custom stack frame categorization. A String containing a comma separated list of fully qualified type
+	 * names/patterns.
+	 *
+	 * @since 3.22
+	 */
+	public static final String PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST = JDIDebugPlugin.getUniqueIdentifier() + ".active_custom_frames_filters"; //$NON-NLS-1$
+
+	/**
+	 * List of inactive filters for custom stack frame categorization. A String containing a comma separated list of fully qualified type
+	 * names/patterns.
+	 *
+	 * @since 3.22
+	 */
+	public static final String PREF_INACTIVE_CUSTOM_FRAME_FILTER_LIST = JDIDebugPlugin.getUniqueIdentifier() + ".inactive_custom_frames_filters"; //$NON-NLS-1$
+
+	/**
+	 * List of active filters for custom stack frame categorization. A String containing a comma separated list of fully qualified type
+	 * names/patterns.
+	 *
+	 * @since 3.22
+	 */
+	public static final String PREF_ACTIVE_PLATFORM_FRAME_FILTER_LIST = JDIDebugPlugin.getUniqueIdentifier() + ".active_platform_frames_filters"; //$NON-NLS-1$
+
+	/**
+	 * List of inactive filters for custom stack frame categorization. A String containing a comma separated list of fully qualified type
+	 * names/patterns.
+	 *
+	 * @since 3.22
+	 */
+	public static final String PREF_INACTIVE_PLATFORM_FRAME_FILTER_LIST = JDIDebugPlugin.getUniqueIdentifier() + ".inactive_platform_frames_filters"; //$NON-NLS-1$
+
+	/**
 	 * Extension point for java logical structures.
 	 *
 	 * @since 3.1
@@ -209,6 +241,8 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 	 * Manages breakpoint listener extensions
 	 */
 	private BreakpointListenerManager fJavaBreakpointManager;
+
+	private StackFrameCategorizer stackFrameCategorizer;
 
 	/**
 	 * Returns whether the debug UI plug-in is in trace mode.
@@ -308,7 +342,7 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 
 					@Override
 					public void saving(ISaveContext c) throws CoreException {
-						IEclipsePreferences node = InstanceScope.INSTANCE.getNode(getUniqueIdentifier());
+						IEclipsePreferences node = getInstancePreferences();
 						if(node != null) {
 							try {
 								node.flush();
@@ -321,10 +355,17 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 		JavaHotCodeReplaceManager.getDefault().startup();
 		fBreakpointListeners = new ListenerList<>();
 		fJavaBreakpointManager = new BreakpointListenerManager();
-		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(getUniqueIdentifier());
+		IEclipsePreferences node = getInstancePreferences();
 		if(node != null) {
 			node.addPreferenceChangeListener(this);
 		}
+	}
+
+	/**
+	 * @return the plugin's preferences from the InstanceScope.
+	 */
+	public static IEclipsePreferences getInstancePreferences() {
+		return InstanceScope.INSTANCE.getNode(getUniqueIdentifier());
 	}
 
 	/**
@@ -355,9 +396,12 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		try {
-			IEclipsePreferences node = InstanceScope.INSTANCE.getNode(getUniqueIdentifier());
+			IEclipsePreferences node = getInstancePreferences();
 			if(node != null) {
 				node.removePreferenceChangeListener(this);
+				if (stackFrameCategorizer != null) {
+					node.removePreferenceChangeListener(stackFrameCategorizer);
+				}
 			}
 			JavaHotCodeReplaceManager.getDefault().shutdown();
 			ILaunchManager launchManager = DebugPlugin.getDefault()
@@ -816,4 +860,16 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 		}
 		return null;
 	}
+
+	/**
+	 * @return the service that helps categorizing the stack frames.
+	 */
+	public synchronized StackFrameCategorizer getStackFrameCategorizer() {
+		if (stackFrameCategorizer == null) {
+			stackFrameCategorizer = new StackFrameCategorizer(Platform.getPreferencesService(), getInstancePreferences());
+			getInstancePreferences().addPreferenceChangeListener(stackFrameCategorizer);
+		}
+		return stackFrameCategorizer;
+	}
+
 }

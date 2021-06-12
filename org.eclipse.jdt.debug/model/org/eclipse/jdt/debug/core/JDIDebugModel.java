@@ -14,6 +14,7 @@
 package org.eclipse.jdt.debug.core;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
@@ -30,8 +31,10 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.jdt.debug.core.IJavaStackFrame.Category;
 import org.eclipse.jdt.internal.debug.core.JDIDebugPlugin;
 import org.eclipse.jdt.internal.debug.core.JavaDebugUtils;
+import org.eclipse.jdt.internal.debug.core.StackFrameCategorizer;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaClassPrepareBreakpoint;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaExceptionBreakpoint;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaLineBreakpoint;
@@ -148,6 +151,61 @@ public class JDIDebugModel {
 	 * @since 3.17
 	 */
 	public static final String DISABLE_HCR_LAUNCH_ATTRIBUTE = getPluginIdentifier() + ".disable.hcr"; //$NON-NLS-1$
+
+	/**
+	 * The user specified a filter, can be used for highlighting specific, very important code layers.
+	 *
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_CUSTOM_FILTERED = new Category("CUSTOM_FILTERED", false); //$NON-NLS-1$
+
+	/**
+	 * The stack frame represents a synthetic function call, which is not based on actual Java source code.
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_SYNTHETIC = new Category("SYNTHETIC", true); //$NON-NLS-1$
+
+	/**
+	 * Methods in classes that considered as platform, like code in 'java.*' packages.
+	 *
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_PLATFORM = new Category("PLATFORM", true); //$NON-NLS-1$
+
+	/**
+	 * Classes found in a test source folder in the project.
+	 *
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_TEST = new Category("TEST", false); //$NON-NLS-1$
+
+	/**
+	 * Classes found in a non-test source folder in the project.
+	 *
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_PRODUCTION = new Category("PRODUCTION", false); //$NON-NLS-1$
+
+	/**
+	 * Classes coming from a library, not from the actual project.
+	 *
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_LIBRARY = new Category("LIBRARY", true); //$NON-NLS-1$
+
+	/**
+	 * Classes with unknown origin.
+	 *
+	 * @since 3.22
+	 */
+	public static final Category CATEGORY_UNKNOWN = new Category("UNKNOWN", true); //$NON-NLS-1$
+
+	/**
+	 * All categories used by {@link StackFrameCategorizer}.
+	 *
+	 * @since 3.22
+	 */
+	public static final List<Category> ALL_CATEGORIES = List.of(CATEGORY_CUSTOM_FILTERED, CATEGORY_SYNTHETIC, CATEGORY_PLATFORM, CATEGORY_TEST, CATEGORY_PRODUCTION, CATEGORY_LIBRARY, CATEGORY_UNKNOWN);
 
 	/**
 	 * Not to be instantiated.

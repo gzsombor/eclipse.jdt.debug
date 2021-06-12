@@ -50,5 +50,10 @@ public class JDIDebugPluginPreferenceInitializer extends
 		node.putBoolean(JDIDebugModel.PREF_SHOW_STEP_RESULT_REMOTE, false);
 		node.putInt(JDIDebugModel.PREF_SHOW_STEP_TIMEOUT, JDIDebugModel.DEF_SHOW_STEP_TIMEOUT);
 		node.putBoolean(JDIDebugPlugin.PREF_ENABLE_ADVANCED_SOURCELOOKUP, true);
+
+		node.put(JDIDebugPlugin.PREF_ACTIVE_PLATFORM_FRAME_FILTER_LIST, "java.*,javax.*,jdk.*,sun.*,sunw.*,org.junit.*,org.eclipse.jdt.internal.*"); //$NON-NLS-1$
+		node.put(JDIDebugPlugin.PREF_INACTIVE_PLATFORM_FRAME_FILTER_LIST, ""); //$NON-NLS-1$
+		node.put(JDIDebugPlugin.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST, ""); //$NON-NLS-1$
+		node.put(JDIDebugPlugin.PREF_INACTIVE_CUSTOM_FRAME_FILTER_LIST, ""); //$NON-NLS-1$
 	}
 }
