@@ -48,6 +48,9 @@ public class JDIDebugUIPreferenceInitializer extends AbstractPreferenceInitializ
 
 		store.setDefault(IJDIPreferencesConstants.PREF_COLLAPSE_STACK_FRAMES, true);
 
+		// JavaStackFramePreferencePage
+		store.setDefault(IJDIPreferencesConstants.PREF_COLORIZE_STACK_FRAMES, true);
+
 		store.setDefault(IDebugUIConstants.ID_VARIABLE_VIEW + "." + IJDIPreferencesConstants.PREF_SHOW_CONSTANTS, false); //$NON-NLS-1$
 		store.setDefault(IDebugUIConstants.ID_EXPRESSION_VIEW + "." + IJDIPreferencesConstants.PREF_SHOW_CONSTANTS, false); //$NON-NLS-1$
 		store.setDefault(IDebugUIConstants.ID_VARIABLE_VIEW + "." + IJDIPreferencesConstants.PREF_SHOW_STATIC_VARIABLES, false); //$NON-NLS-1$
