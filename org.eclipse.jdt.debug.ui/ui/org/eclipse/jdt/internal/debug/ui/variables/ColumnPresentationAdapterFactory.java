@@ -14,6 +14,7 @@
 package org.eclipse.jdt.internal.debug.ui.variables;
 
 import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.debug.core.IExpressionManager;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IColumnPresentationFactory;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IElementEditor;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -41,6 +42,11 @@ public class ColumnPresentationAdapterFactory implements IAdapterFactory {
 			}
 		}
 		if (adaptableObject instanceof IJavaStackFrame) {
+			if (IColumnPresentationFactory.class.equals(adapterType)) {
+				return (T) fgColumnPresentation;
+			}
+		}
+		if (adaptableObject instanceof IExpressionManager) {
 			if (IColumnPresentationFactory.class.equals(adapterType)) {
 				return (T) fgColumnPresentation;
 			}
