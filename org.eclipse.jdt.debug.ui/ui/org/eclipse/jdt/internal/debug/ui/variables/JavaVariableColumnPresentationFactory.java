@@ -14,6 +14,7 @@
 package org.eclipse.jdt.internal.debug.ui.variables;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.debug.core.IExpressionManager;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IColumnPresentation;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IColumnPresentationFactory;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IPresentationContext;
@@ -49,7 +50,13 @@ public class JavaVariableColumnPresentationFactory implements IColumnPresentatio
 
 	private boolean isApplicable(IPresentationContext context, Object element) {
 		IJavaStackFrame frame = null;
-		if (IDebugUIConstants.ID_VARIABLE_VIEW.equals(context.getId())) {
+		var id = context.getId();
+		if (IDebugUIConstants.ID_EXPRESSION_VIEW.equals(id)) {
+			if (element instanceof IExpressionManager) {
+				return true;
+			}
+		}
+		if (IDebugUIConstants.ID_VARIABLE_VIEW.equals(id)) {
 			if (element instanceof IAdaptable) {
 				IAdaptable adaptable = (IAdaptable)element;
 				frame = adaptable.getAdapter(IJavaStackFrame.class);
