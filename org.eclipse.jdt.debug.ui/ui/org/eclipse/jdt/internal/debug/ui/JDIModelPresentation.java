@@ -54,6 +54,7 @@ import org.eclipse.jdt.debug.core.IJavaClassPrepareBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaExceptionBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaFieldVariable;
+import org.eclipse.jdt.debug.core.IJavaInterfaceType;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaMethodBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaMethodEntryBreakpoint;
@@ -74,6 +75,7 @@ import org.eclipse.jdt.internal.debug.core.logicalstructures.JDIAllInstancesValu
 import org.eclipse.jdt.internal.debug.core.logicalstructures.JDIReturnValueVariable;
 import org.eclipse.jdt.internal.debug.core.model.GroupedStackFrame;
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugModelMessages;
+import org.eclipse.jdt.internal.debug.core.model.JDIObjectValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceListEntryVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceListValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceListVariable;
@@ -1311,8 +1313,55 @@ public class JDIModelPresentation extends LabelProvider implements IDebugModelPr
 	}
 
 	/**
-	 * Returns text for the given value based on user preferences to display
-	 * toString() details.
+	 * The label of the value - if assigned, or an empty string, never null
+	 */
+	public String getLabelColumnText(IValue value) throws DebugException {
+		if (value instanceof IJavaObject) {
+			String label = ((IJavaObject) value).getLabel();
+			if (label != null) {
+				return label;
+			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * The instance count for the value - or an empty string if it's not available.
+	 */
+	public String getInstanceCountColumnText(IVariable variable, IValue value) throws DebugException {
+		if (value instanceof IJavaObject) {
+			IJavaType jType = ((IJavaObject) value).getJavaType();
+			if (jType == null && variable instanceof IJavaVariable) {
+				jType = ((IJavaVariable) variable).getJavaType();
+			}
+			if (jType instanceof IJavaReferenceType) {
+				if (!(jType instanceof IJavaInterfaceType)) {
+					long count = ((IJavaReferenceType) jType).getInstanceCount();
+					if (count == -1) {
+						return DebugUIMessages.JavaVariableLabelProvider_0;
+					}
+					return String.valueOf(count);
+				}
+			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * The unique id for the value, or an empty string if it's not available.
+	 */
+	public String getUniqueIdColumnText(IValue value) throws DebugException {
+		if (value instanceof JDIObjectValue) {
+			long uniqueId = ((JDIObjectValue) value).getUniqueId();
+			if (uniqueId >= 0) {
+				return String.valueOf(uniqueId);
+			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns text for the given value based on user preferences to display toString() details.
 	 *
 	 * @return text
 	 */
