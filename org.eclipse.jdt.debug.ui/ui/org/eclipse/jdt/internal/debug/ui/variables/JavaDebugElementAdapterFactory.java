@@ -14,6 +14,7 @@
 package org.eclipse.jdt.internal.debug.ui.variables;
 
 import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.debug.core.model.IWatchExpression;
 import org.eclipse.debug.internal.ui.model.elements.ExpressionLabelProvider;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IElementContentProvider;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IElementLabelProvider;
@@ -22,6 +23,7 @@ import org.eclipse.debug.ui.actions.IWatchExpressionFactoryAdapter;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
+import org.eclipse.jdt.internal.debug.ui.JDIModelPresentation;
 import org.eclipse.jdt.internal.debug.ui.display.JavaInspectExpression;
 import org.eclipse.jdt.internal.debug.ui.heapwalking.JavaWatchExpressionFilter;
 
@@ -39,9 +41,10 @@ import org.eclipse.jdt.internal.debug.ui.heapwalking.JavaWatchExpressionFilter;
  */
 public class JavaDebugElementAdapterFactory implements IAdapterFactory {
 
+	private static final JDIModelPresentation modelPresentation = new JDIModelPresentation();
 	private static final IElementLabelProvider fgLPVariable = new JavaVariableLabelProvider();
 	private static final IElementContentProvider fgCPVariable = new JavaVariableContentProvider();
-	private static final IElementLabelProvider fgLPExpression = new ExpressionLabelProvider();
+	private static final IElementLabelProvider fgLPExpression = new JavaExpressionLabelProvider(modelPresentation);
 	private static final IElementContentProvider fgCPExpression = new JavaExpressionContentProvider();
 	private static final IWatchExpressionFactoryAdapter fgWEVariable = new JavaWatchExpressionFilter();
 	private static final IElementMementoProvider fgMPStackFrame = new JavaStackFrameMementoProvider();
@@ -61,6 +64,9 @@ public class JavaDebugElementAdapterFactory implements IAdapterFactory {
 				return (T) fgLPFrame;
 			}
 			if (adaptableObject instanceof JavaInspectExpression) {
+				return (T) fgLPExpression;
+			}
+			if (adaptableObject instanceof IWatchExpression) {
 				return (T) fgLPExpression;
 			}
 		}
