@@ -37,6 +37,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.debug.core.model.IWatchExpression;
+import org.eclipse.debug.internal.core.ExpressionManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.debug.ui.IDebugUIConstants;
@@ -398,6 +400,7 @@ public class JDIDebugUIPlugin extends AbstractUIPlugin {
         IAdapterFactory columnFactory = new ColumnPresentationAdapterFactory();
         manager.registerAdapters(columnFactory, IJavaVariable.class);
         manager.registerAdapters(columnFactory, IJavaStackFrame.class);
+		manager.registerAdapters(columnFactory, ExpressionManager.class);
 
         IAdapterFactory entryFactory = new ClasspathEntryAdapterFactory();
         manager.registerAdapters(entryFactory, DefaultProjectClasspathEntry.class);
@@ -406,6 +409,7 @@ public class JDIDebugUIPlugin extends AbstractUIPlugin {
         manager.registerAdapters(variableFactory, IJavaVariable.class);
         manager.registerAdapters(variableFactory, IJavaValue.class);
         manager.registerAdapters(variableFactory, JavaInspectExpression.class);
+		manager.registerAdapters(variableFactory, IWatchExpression.class);
 
 		fHCRListener= new JavaHotCodeReplaceListener();
 		JDIDebugModel.addHotCodeReplaceListener(fHCRListener);

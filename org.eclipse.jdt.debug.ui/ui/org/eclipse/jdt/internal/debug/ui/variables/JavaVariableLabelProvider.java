@@ -31,15 +31,11 @@ import org.eclipse.debug.internal.ui.model.elements.VariableLabelProvider;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.ILabelUpdate;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IPresentationContext;
 import org.eclipse.debug.ui.IDebugModelPresentation;
-import org.eclipse.jdt.debug.core.IJavaInterfaceType;
 import org.eclipse.jdt.debug.core.IJavaObject;
-import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
-import org.eclipse.jdt.internal.debug.core.model.JDIObjectValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
 import org.eclipse.jdt.internal.debug.ui.DebugUIMessages;
 import org.eclipse.jdt.internal.debug.ui.IJDIPreferencesConstants;
@@ -55,7 +51,7 @@ import org.eclipse.swt.graphics.FontData;
  */
 public class JavaVariableLabelProvider extends VariableLabelProvider implements IPreferenceChangeListener {
 
-	private final static JDIModelPresentation fLabelProvider = new JDIModelPresentation();
+	private final JDIModelPresentation fLabelProvider;
 	/**
 	 * Map of view id to qualified name setting
 	 */
@@ -71,7 +67,8 @@ public class JavaVariableLabelProvider extends VariableLabelProvider implements 
 	private static final int SERIALIZE_NONE = 1; // all toString()'s in line, so don't serialize labels (evaluations will be serialized)
 	private static final int SERIALIZE_SOME = 2; // some - only serialize those that don't have formatters (ones with formatters will be serialized by evaluation)
 
-	public JavaVariableLabelProvider() {
+	public JavaVariableLabelProvider(JDIModelPresentation labelProvider) {
+		this.fLabelProvider = labelProvider;
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(JDIDebugUIPlugin.getUniqueIdentifier());
 		if(prefs != null) {
 			prefs.addPreferenceChangeListener(this);
@@ -160,44 +157,13 @@ public class JavaVariableLabelProvider extends VariableLabelProvider implements 
 	@Override
 	protected String getColumnText(IVariable variable, IValue value, IPresentationContext context, String columnId) throws CoreException {
 		if (JavaVariableColumnPresentation.COLUMN_INSTANCE_ID.equals(columnId)) {
-			if (value instanceof JDIObjectValue) {
-				long uniqueId = ((JDIObjectValue)value).getUniqueId();
-				if (uniqueId >= 0) {
-					StringBuilder buffer = new StringBuilder();
-					buffer.append(uniqueId);
-					return buffer.toString();
-				}
-			}
-			return ""; //$NON-NLS-1$
+			return fLabelProvider.getUniqueIdColumnText(value);
 		}
 		if (JavaVariableColumnPresentation.COLUMN_INSTANCE_COUNT.equals(columnId)) {
-			if (value instanceof IJavaObject) {
-				IJavaType jType = ((IJavaObject)value).getJavaType();
-				if (jType == null && variable instanceof IJavaVariable) {
-					jType = ((IJavaVariable)variable).getJavaType();
-				}
-				if (jType instanceof IJavaReferenceType) {
-					if (!(jType instanceof IJavaInterfaceType)) {
-						long count = ((IJavaReferenceType)jType).getInstanceCount();
-						if (count == -1) {
-							return DebugUIMessages.JavaVariableLabelProvider_0;
-						}
-						StringBuilder buffer = new StringBuilder();
-						buffer.append(count);
-						return buffer.toString();
-					}
-				}
-			}
-			return ""; //$NON-NLS-1$
+			return fLabelProvider.getInstanceCountColumnText(variable, value);
 		}
 		if (JavaVariableColumnPresentation.COLUMN_LABEL.equals(columnId)) {
-			if (value instanceof IJavaObject) {
-				String label = ((IJavaObject) value).getLabel();
-				if (label != null) {
-					return label;
-				}
-			}
-			return ""; //$NON-NLS-1$
+			return fLabelProvider.getLabelColumnText(value);
 		}
 		return super.getColumnText(variable, value, context, columnId);
 	}
