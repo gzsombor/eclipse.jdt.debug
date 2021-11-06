@@ -272,11 +272,11 @@ public class ASTEvaluationEngine implements IAstEvaluationEngine {
 			List<IJavaVariable> localsVar = new ArrayList<>();
 			localsVar.addAll(Arrays.asList(context.getLocals()));
 			IJavaObject thisClass = context.getThis();
-			IVariable[] innerClassFields; // For anonymous classes, getting variables from outer class
+			final List<IVariable> innerClassFields; // For anonymous classes, getting variables from outer class
 			if (null != thisClass) {
 				innerClassFields = extractVariables(thisClass);
 			} else {
-				innerClassFields = new IVariable[0];
+				innerClassFields = Collections.emptyList();
 			}
 			List<IVariable> lambdaFrameVariables = LambdaUtils.getLambdaFrameVariables(frame);
 			int numLocalsVar = localsVar.size();
@@ -286,8 +286,8 @@ public class ASTEvaluationEngine implements IAstEvaluationEngine {
 			// Types
 			// and to remove locals with duplicate names
 			// IJavaVariable[] locals = new IJavaVariable[numLocalsVar];
-			IJavaVariable[] locals = new IJavaVariable[numLocalsVar + innerClassFields.length + lambdaFrameVariables.size()];
-			String[] localVariablesWithNull = new String[numLocalsVar + innerClassFields.length + lambdaFrameVariables.size()];
+			IJavaVariable[] locals = new IJavaVariable[numLocalsVar + innerClassFields.size() + lambdaFrameVariables.size()];
+			String[] localVariablesWithNull = new String[numLocalsVar + innerClassFields.size() + lambdaFrameVariables.size()];
 			int numLocals = 0;
 			for (int i = 0; i < numLocalsVar; i++) {
 				IJavaVariable variable = localsVar.get(i);
@@ -371,11 +371,11 @@ public class ASTEvaluationEngine implements IAstEvaluationEngine {
 		return createExpressionFromAST(snippet, mapper, unit);
 	}
 
-	private IVariable[] extractVariables(IJavaObject thisClass) throws DebugException {
+	private List<IVariable> extractVariables(IJavaObject thisClass) throws DebugException {
 		IVariable[] vars = thisClass.getVariables();
 		List<IVariable> varList = new ArrayList<>(Arrays.asList(vars));
-		varList.addAll(Arrays.asList(SyntheticVariableUtils.findSyntheticVariables(vars)));
-		return varList.toArray(new IVariable[0]);
+		varList.addAll(SyntheticVariableUtils.findSyntheticVariables(vars));
+		return varList;
 	}
 
 	private String getFixedUnresolvableGenericTypes(IJavaVariable variable) throws DebugException {
