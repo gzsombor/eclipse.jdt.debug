@@ -49,8 +49,7 @@ public class PushLocalVariable extends SimpleInstruction {
 			return;
 		}
 		IRuntimeContext context = getContext();
-		IJavaVariable[] locals = context.getLocals();
-		for (IJavaVariable local : locals) {
+		for (IJavaVariable local : context.getLocals()) {
 			if (local.getName().equals(getName())) {
 				push(local);
 				return;
