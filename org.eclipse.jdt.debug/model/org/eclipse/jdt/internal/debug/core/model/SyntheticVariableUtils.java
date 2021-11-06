@@ -14,7 +14,7 @@
 package org.eclipse.jdt.internal.debug.core.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
@@ -63,7 +63,7 @@ public final class SyntheticVariableUtils {
 	 *            variable to search on
 	 * @return array of variables
 	 */
-	public static IVariable[] findSyntheticVariables(IVariable[] variables) throws DebugException {
+	public static List<IVariable> findSyntheticVariables(IVariable[] variables) throws DebugException {
 		ArrayList<IVariable> extracted = new ArrayList<>();
 		for (IVariable variable : variables) {
 			if (variable.getName().startsWith(ANONYMOUS_VAR_PREFIX)) {
@@ -71,10 +71,10 @@ public final class SyntheticVariableUtils {
 			}
 
 			if (variable.getName().startsWith(ENCLOSING_INSTANCE_PREFIX)) {
-				extracted.addAll(Arrays.asList(findSyntheticVariables(variable.getValue().getVariables())));
+				extracted.addAll(findSyntheticVariables(variable.getValue().getVariables()));
 			}
 		}
-		return extracted.toArray(new IVariable[extracted.size()]);
+		return extracted;
 	}
 
 }
