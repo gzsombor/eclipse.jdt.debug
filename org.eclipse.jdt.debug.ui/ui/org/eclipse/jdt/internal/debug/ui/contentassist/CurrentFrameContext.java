@@ -15,6 +15,7 @@ package org.eclipse.jdt.internal.debug.ui.contentassist;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -69,15 +70,15 @@ public class CurrentFrameContext extends TypeContext {
 	public String[][] getLocalVariables() throws CoreException {
         IJavaStackFrame frame = getStackFrame();
         if (frame != null) {
-			IVariable[] variables = extractVariables(frame);
+			List<IVariable> variables = extractVariables(frame);
             int index = 0;
-			while (index < variables.length
-					&& (variables[index] instanceof JDIThisVariable || JDIPlaceholderVariable.class.isAssignableFrom(variables[index].getClass()))) {
+			while (index < variables.size()
+					&& (variables.get(index) instanceof JDIThisVariable || JDIPlaceholderVariable.class.isAssignableFrom(variables.get(index).getClass()))) {
 				index++;
 			}
-            String[][] locals = new String[2][variables.length - index];
+            String[][] locals = new String[2][variables.size() - index];
             for (int i = 0; i < locals[0].length; i++) {
-                IJavaVariable var = (IJavaVariable) variables[index];
+                IJavaVariable var = (IJavaVariable) variables.get(index);
 				locals[0][i] = resolveVarName(var);
                 try {
 					locals[1][i] = Signature.toString(var.getGenericSignature()).replace('/', '.');
@@ -92,15 +93,15 @@ public class CurrentFrameContext extends TypeContext {
         return super.getLocalVariables();
     }
 
-	private IVariable[] extractVariables(IJavaStackFrame frame) throws DebugException {
+	private List<IVariable> extractVariables(IJavaStackFrame frame) throws DebugException {
 		ArrayList<IVariable> vars = new ArrayList<>(Arrays.asList(frame.getVariables()));
 		for (IVariable var : vars) {
 			if (var instanceof JDIThisVariable) {
-				vars.addAll(Arrays.asList(SyntheticVariableUtils.findSyntheticVariables(var.getValue().getVariables())));
+				vars.addAll(SyntheticVariableUtils.findSyntheticVariables(var.getValue().getVariables()));
 				break;
 			}
 		}
-		return vars.toArray(new IVariable[0]);
+		return vars;
 	}
 
 	private String resolveVarName(IJavaVariable var) throws DebugException {
