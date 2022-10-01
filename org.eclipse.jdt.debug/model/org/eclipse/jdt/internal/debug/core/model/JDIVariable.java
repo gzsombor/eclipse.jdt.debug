@@ -43,6 +43,12 @@ public abstract class JDIVariable extends JDIDebugElement implements
 	 */
 	private int fLastChangeIndex = -1;
 
+	/**
+	 * This variable contains the suspend count when this variable is read from the debugged process. If the suspend count hasn't increased since
+	 * that, it can be assumed, that the value hasn't changed.
+	 */
+	private int lastRead = -1;
+
 	protected final static String jdiStringSignature = "Ljava/lang/String;"; //$NON-NLS-1$
 
 	public JDIVariable(JDIDebugTarget target) {
@@ -95,23 +101,26 @@ public abstract class JDIVariable extends JDIDebugElement implements
 	 */
 	@Override
 	public IValue getValue() throws DebugException {
+		final var javaDebugTarget = getJavaDebugTarget();
+		var currentSuspendCount = javaDebugTarget.getSuspendCount();
+		if (currentSuspendCount == lastRead) {
+			return fValue;
+		}
 		Value currentValue = getCurrentValue();
+		lastRead = currentSuspendCount;
 		if (fValue == null) {
-			fValue = JDIValue.createValue((JDIDebugTarget) getDebugTarget(),
-					currentValue);
+			fValue = JDIValue.createValue(javaDebugTarget, currentValue);
 		} else {
 			Value previousValue = fValue.getUnderlyingValue();
 			if (currentValue == previousValue) {
 				return fValue;
 			}
 			if (previousValue == null || currentValue == null) {
-				fValue = JDIValue.createValue(
-						(JDIDebugTarget) getDebugTarget(), currentValue);
-				setChangeCount(getJavaDebugTarget().getSuspendCount());
+				fValue = JDIValue.createValue(javaDebugTarget, currentValue);
+				setChangeCount(currentSuspendCount);
 			} else if (!previousValue.equals(currentValue)) {
-				fValue = JDIValue.createValue(
-						(JDIDebugTarget) getDebugTarget(), currentValue);
-				setChangeCount(getJavaDebugTarget().getSuspendCount());
+				fValue = JDIValue.createValue(javaDebugTarget, currentValue);
+				setChangeCount(currentSuspendCount);
 			}
 		}
 		return fValue;
