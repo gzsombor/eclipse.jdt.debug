@@ -59,6 +59,10 @@ public class SelectImportsDialog extends TitleAreaDialog {
 
 			@Override
 			public void setStoredFilters(IPreferenceStore store, Filter[] filters) {
+				String[] imports = new String[filters.length];
+				for (int i = 0; i < filters.length; i++) {
+					imports[i] = filters[i].getName();
+				}
 				fEditor.setImports(imports);
 			}
 
