@@ -16,7 +16,6 @@ package org.eclipse.jdt.internal.debug.ui.actions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -48,9 +47,7 @@ public abstract class AbstractAddStepFilterAction extends ObjectActionDelegate {
 		}
 
 		// For each selected stack frame, add a corresponding active step filter
-		Iterator<IJavaStackFrame> itr = selection.iterator();
-		while (itr.hasNext()) {
-			IJavaStackFrame frame = itr.next();
+		for (IJavaStackFrame frame : (Iterable<IJavaStackFrame>) selection) {
 			String pattern = generateStepFilterPattern(frame);
 			if (pattern != null) {
 				addActiveStepFilter(pattern);
