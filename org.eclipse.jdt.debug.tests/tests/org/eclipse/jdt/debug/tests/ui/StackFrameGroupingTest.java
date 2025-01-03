@@ -13,71 +13,71 @@
  *******************************************************************************/
 package org.eclipse.jdt.debug.tests.ui;
 
-import org.eclipse.debug.core.DebugException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaStackFrame.Category;
 import org.eclipse.jdt.debug.tests.AbstractDebugTest;
-import org.eclipse.jdt.internal.debug.ui.IJDIPreferencesConstants;
-import org.eclipse.jdt.internal.debug.ui.StackFramePresentationProvider;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceStore;
+import org.eclipse.jdt.internal.debug.core.JDIDebugPlugin;
+import org.eclipse.jdt.internal.debug.core.StackFrameCategorizer;
 
-public class StackFramePresentationProviderTest extends AbstractDebugTest {
+public class StackFrameGroupingTest extends AbstractDebugTest {
 
-	public StackFramePresentationProviderTest(String name) {
+	public StackFrameGroupingTest(String name) {
 		super(name);
 	}
 
-	private StackFramePresentationProvider provider;
-	private IPreferenceStore preferenceStore;
+	private StackFrameCategorizer stackFrameCategorizer;
+	private IEclipsePreferences preferences;
+	private Map<String, Object> values;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		preferenceStore = new PreferenceStore();
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_ACTIVE_PLATFORM_FRAME_FILTER_LIST, "java.*,javax.*");
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_COLORIZE_STACK_FRAMES, true);
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_COLORIZE_PLATFORM_METHODS, true);
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_COLORIZE_CUSTOM_METHODS, true);
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_COLORIZE_SYNTHETIC_METHODS, true);
-		provider = new StackFramePresentationProvider(preferenceStore);
+		values = new HashMap<>();
+		values.put(JDIDebugPlugin.PREF_ACTIVE_PLATFORM_FRAME_FILTER_LIST, "java.*,javax.*");
+		preferences = PreferenceServiceMock.createEclipsePreferences(values);
+		stackFrameCategorizer = new StackFrameCategorizer(PreferenceServiceMock.createPreferencesService(values), preferences);
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		provider.close();
-	}
-
-	private IJavaStackFrame.Category categorize(String refTypeName, boolean syntetic) throws DebugException {
+	private IJavaStackFrame.Category categorize(String refTypeName, boolean syntetic) {
 		return categorize(JavaReferenceTypeMock.createReference(refTypeName), syntetic);
 	}
 
-	private IJavaStackFrame.Category categorize(IJavaReferenceType refType, boolean syntetic) throws DebugException {
-		return provider.categorize(JavaStackFrameMock.createFrame(refType, syntetic));
+	private IJavaStackFrame.Category categorize(IJavaReferenceType refType, boolean syntetic) {
+		return stackFrameCategorizer.categorize(JavaStackFrameMock.createFrame(refType, syntetic));
 	}
 
-	public void testFiltering() throws DebugException {
+	public void testFiltering() {
 		assertEquals(IJavaStackFrame.Category.SYNTHETIC, categorize("org.eclipse.Something", true));
 		assertEquals(IJavaStackFrame.Category.PLATFORM, categorize("java.lang.String", false));
 		assertEquals(IJavaStackFrame.Category.UNKNOWN, categorize("org.eclipse.Other", false));
 	}
 
-	public void testUpdateWorks() throws DebugException {
+	public void testUpdateWorks() {
 		var something = JavaReferenceTypeMock.createReference("org.eclipse.Something");
 		var other = JavaReferenceTypeMock.createReference("org.eclipse.Other");
 		assertEquals(IJavaStackFrame.Category.UNKNOWN, categorize(something, false));
 		assertEquals(IJavaStackFrame.Category.UNKNOWN, categorize(other, false));
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST, "org.eclipse.Something");
+		assertEquals(IJavaStackFrame.Category.PLATFORM, categorize("java.lang.String", false));
+		stackFrameCategorizer.addTypesToActiveCustomFilters(Set.of("org.eclipse.Something"));
+		stackFrameCategorizer.preferenceChange(new PreferenceChangeEvent(preferences, JDIDebugPlugin.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST, null, null));
 
 		assertEquals(IJavaStackFrame.Category.CUSTOM_FILTERED, categorize(something, false));
 		assertEquals(IJavaStackFrame.Category.UNKNOWN, categorize(other, false));
+		assertEquals(IJavaStackFrame.Category.PLATFORM, categorize("java.lang.String", false));
 	}
 
-	public void testSwitchOffPlatform() throws DebugException {
+	public void testSwitchOffPlatform() {
 		assertEquals(IJavaStackFrame.Category.PLATFORM, categorize("java.lang.String", false));
-		preferenceStore.setValue(IJDIPreferencesConstants.PREF_COLORIZE_PLATFORM_METHODS, false);
+		stackFrameCategorizer.setEnabled(Category.PLATFORM, false);
 		assertEquals(IJavaStackFrame.Category.UNKNOWN, categorize("java.lang.String", false));
 	}
+
 
 }
