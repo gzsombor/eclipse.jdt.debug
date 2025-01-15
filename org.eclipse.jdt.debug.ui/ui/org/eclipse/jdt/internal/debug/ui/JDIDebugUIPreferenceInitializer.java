@@ -20,7 +20,6 @@ import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jdt.debug.ui.IJavaDebugUIConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.util.Util;
 
 public class JDIDebugUIPreferenceInitializer extends AbstractPreferenceInitializer {
 
@@ -47,10 +46,6 @@ public class JDIDebugUIPreferenceInitializer extends AbstractPreferenceInitializ
 		store.setDefault(IJDIPreferencesConstants.PREF_INACTIVE_FILTERS_LIST, "com.ibm.*,com.sun.*,java.*,javax.*,jdk.*,jrockit.*,org.omg.*,sun.*,sunw.*"); //$NON-NLS-1$
 		store.setDefault(IJDIPreferencesConstants.PREF_STEP_THRU_FILTERS, true);
 
-		store.setDefault(IJDIPreferencesConstants.PREF_ACTIVE_PLATFORM_FRAME_FILTER_LIST, "java.*,javax.*,jdk.*,sun.*,sunw.*,org.junit.*,org.eclipse.jdt.internal.*"); //$NON-NLS-1$
-		store.setDefault(IJDIPreferencesConstants.PREF_INACTIVE_PLATFORM_FRAME_FILTER_LIST, Util.ZERO_LENGTH_STRING);
-		store.setDefault(IJDIPreferencesConstants.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST, Util.ZERO_LENGTH_STRING);
-		store.setDefault(IJDIPreferencesConstants.PREF_INACTIVE_CUSTOM_FRAME_FILTER_LIST, Util.ZERO_LENGTH_STRING);
 		store.setDefault(IJDIPreferencesConstants.PREF_COLLAPSE_STACK_FRAMES, true);
 
 		store.setDefault(IDebugUIConstants.ID_VARIABLE_VIEW + "." + IJDIPreferencesConstants.PREF_SHOW_CONSTANTS, false); //$NON-NLS-1$

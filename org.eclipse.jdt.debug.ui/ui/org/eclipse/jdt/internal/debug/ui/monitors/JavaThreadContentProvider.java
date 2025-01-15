@@ -153,7 +153,7 @@ public class JavaThreadContentProvider extends JavaElementContentProvider {
 				first = false;
 			} else {
 				if (frame instanceof JDIStackFrame javaFrame) {
-					var category = stackFrameProvider.getCategory(javaFrame);
+					var category = javaFrame.getCategory();
 					if (category == null || category == Category.TEST || category == Category.PRODUCTION || category == Category.CUSTOM_FILTERED) {
 						result.add(javaFrame);
 						lastGroupping = null;
