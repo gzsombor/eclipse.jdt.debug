@@ -16,7 +16,7 @@ package org.eclipse.jdt.internal.debug.core;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
@@ -35,14 +35,7 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame.Category;
  * Service to help categorize the stack frames into {@link IJavaStackFrame.Category}, based on the internally stored preferences.
  */
 public class StackFrameCategorizer implements IPreferenceChangeListener {
-	private final static Map<String, Category> PREFERENCE_MAPPING = Map.of(JDIDebugPlugin.PREF_COLORIZE_CUSTOM_METHODS, Category.CUSTOM_FILTERED, //
-			JDIDebugPlugin.PREF_COLORIZE_SYNTHETIC_METHODS, Category.SYNTHETIC, //
-			JDIDebugPlugin.PREF_COLORIZE_PLATFORM_METHODS, Category.PLATFORM, //
-			JDIDebugPlugin.PREF_COLORIZE_TEST_METHODS, Category.TEST, //
-			JDIDebugPlugin.PREF_COLORIZE_PRODUCTION_METHODS, Category.PRODUCTION, //
-			JDIDebugPlugin.PREF_COLORIZE_LIBRARY_METHODS, Category.LIBRARY);
-
-	private final static EnumMap<Category, String> REVERSE_MAPPING = new EnumMap<>(PREFERENCE_MAPPING.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey)));
+	private final static String PREFIX = JDIDebugPlugin.getUniqueIdentifier() + ".enable_category_"; //$NON-NLS-1$
 
 	/**
 	 * Class to decide if a particular class name is part of a list of classes and list of packages.
@@ -68,13 +61,15 @@ public class StackFrameCategorizer implements IPreferenceChangeListener {
 	private Filters custom;
 	private final EnumMap<Category, Boolean> enabledCategories;
 	private final IPreferencesService preferenceService;
+	private final IEclipsePreferences instancePreferences;
 
-	public StackFrameCategorizer(IPreferencesService preferenceService) {
+	public StackFrameCategorizer(IPreferencesService preferenceService, IEclipsePreferences instancePreferences) {
 		this.preferenceService = preferenceService;
+		this.instancePreferences = instancePreferences;
 		enabledCategories = new EnumMap<>(Category.class);
-		for (var kv : PREFERENCE_MAPPING.entrySet()) {
-			boolean enabled = preferenceService.getBoolean(JDIDebugPlugin.getUniqueIdentifier(), kv.getKey(), true, null);
-			enabledCategories.put(kv.getValue(), enabled);
+		for (var category : Category.values()) {
+			boolean enabled = preferenceService.getBoolean(JDIDebugPlugin.getUniqueIdentifier(), getNameOfTheFlagToEnable(category), true, null);
+			enabledCategories.put(category, enabled);
 		}
 
 		platform = createActivePlatformFilters();
@@ -187,9 +182,20 @@ public class StackFrameCategorizer implements IPreferenceChangeListener {
 		return Boolean.TRUE.equals(enabledCategories.get(category));
 	}
 
+	private String getNameOfTheFlagToEnable(Category category) {
+		return PREFIX + category.name();
+	}
+
+	private Category getCategoryFromNameOfTheFlag(String flagName) {
+		if (flagName.startsWith(PREFIX)) {
+			return Category.valueOf(flagName.substring(PREFIX.length()));
+		}
+		return null;
+	}
+
 	public void setEnabled(Category category, boolean flag) {
 		enabledCategories.put(category, flag);
-		JDIDebugPlugin.getInstancePreferences().putBoolean(REVERSE_MAPPING.get(category), flag);
+		instancePreferences.putBoolean(getNameOfTheFlagToEnable(category), flag);
 	}
 
 	/**
@@ -217,11 +223,33 @@ public class StackFrameCategorizer implements IPreferenceChangeListener {
 		} else if (JDIDebugPlugin.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST.equals(prop)) {
 			custom = createActiveCustomFilters();
 		} else {
-			var category = PREFERENCE_MAPPING.get(prop);
+			var category = getCategoryFromNameOfTheFlag(prop);
 			if (category != null) {
 				enabledCategories.put(category, (Boolean) event.getNewValue());
 			}
 		}
 	}
 
+	/**
+	 * Adds the given class names to the definition of the active list of custom, highlighted classes.
+	 *
+	 * @param classNames
+	 *            name of the classes.
+	 */
+	public void addTypesToActiveCustomFilters(Set<String> classNames) {
+		List<String> actives = new ArrayList<>(List.of(getActiveCustomStackFilter()));
+		List<String> inactives = new ArrayList<>(List.of(getInactiveCustomStackFilter()));
+		for (String className : classNames) {
+			inactives.remove(className);
+			if (!actives.contains(className)) {
+				actives.add(className);
+			}
+		}
+		instancePreferences.put(JDIDebugPlugin.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST, convert(actives));
+		instancePreferences.put(JDIDebugPlugin.PREF_INACTIVE_CUSTOM_FRAME_FILTER_LIST, convert(inactives));
+	}
+
+	private String convert(List<String> classNames) {
+		return classNames.stream().collect(Collectors.joining(",")); //$NON-NLS-1$
+	}
 }

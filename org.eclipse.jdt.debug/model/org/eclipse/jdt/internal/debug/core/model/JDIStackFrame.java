@@ -1740,4 +1740,9 @@ public class JDIStackFrame extends JDIDebugElement implements IJavaStackFrame {
 		}
 		return fCategory;
 	}
+
+	@Override
+	public synchronized void resetCategory() {
+		fCategory = null;
+	}
 }

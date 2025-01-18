@@ -573,8 +573,15 @@ public interface IJavaStackFrame extends IStackFrame, IJavaModifiers,
 
 	/**
 	 * @since 3.22
-	 * @return the category of the stack frame, null if it's not yet categorized.
+	 * @return the category of the stack frame.
 	 */
-	public Category getCategory();
+	Category getCategory();
+
+	/**
+	 * Request re-evaluation of the category.
+	 *
+	 * @since 3.22
+	 */
+	void resetCategory();
 
 }

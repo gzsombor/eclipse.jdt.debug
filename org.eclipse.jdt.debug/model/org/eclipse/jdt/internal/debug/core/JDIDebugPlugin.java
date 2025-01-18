@@ -150,13 +150,6 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 	 */
 	public static final String PREF_INACTIVE_PLATFORM_FRAME_FILTER_LIST = JDIDebugPlugin.getUniqueIdentifier() + ".inactive_platform_frames_filters"; //$NON-NLS-1$
 
-	public static final String PREF_COLORIZE_PLATFORM_METHODS = JDIDebugPlugin.getUniqueIdentifier() + ".colorize_platform_methods"; //$NON-NLS-1$
-	public static final String PREF_COLORIZE_SYNTHETIC_METHODS = JDIDebugPlugin.getUniqueIdentifier() + ".colorize_synthetic_methods"; //$NON-NLS-1$
-	public static final String PREF_COLORIZE_LIBRARY_METHODS = JDIDebugPlugin.getUniqueIdentifier() + ".colorize_library_methods"; //$NON-NLS-1$
-	public static final String PREF_COLORIZE_TEST_METHODS = JDIDebugPlugin.getUniqueIdentifier() + ".colorize_test_methods"; //$NON-NLS-1$
-	public static final String PREF_COLORIZE_PRODUCTION_METHODS = JDIDebugPlugin.getUniqueIdentifier() + ".colorize_production_methods"; //$NON-NLS-1$
-	public static final String PREF_COLORIZE_CUSTOM_METHODS = JDIDebugPlugin.getUniqueIdentifier() + ".colorize_custom_methods"; //$NON-NLS-1$
-
 	/**
 	 * Extension point for java logical structures.
 	 *
@@ -873,7 +866,7 @@ public class JDIDebugPlugin extends Plugin implements IEclipsePreferences.IPrefe
 	 */
 	public synchronized StackFrameCategorizer getStackFrameCategorizer() {
 		if (stackFrameCategorizer == null) {
-			stackFrameCategorizer = new StackFrameCategorizer(Platform.getPreferencesService());
+			stackFrameCategorizer = new StackFrameCategorizer(Platform.getPreferencesService(), getInstancePreferences());
 			getInstancePreferences().addPreferenceChangeListener(stackFrameCategorizer);
 		}
 		return stackFrameCategorizer;
