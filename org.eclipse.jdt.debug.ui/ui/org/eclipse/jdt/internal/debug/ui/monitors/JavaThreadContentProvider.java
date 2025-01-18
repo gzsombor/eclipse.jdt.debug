@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugElement;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IChildrenCountUpdate;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IChildrenUpdate;
 import org.eclipse.debug.internal.ui.viewers.model.provisional.IHasChildrenUpdate;
@@ -107,7 +108,7 @@ public class JavaThreadContentProvider extends JavaElementContentProvider {
 					}
 				}
 			}
-			var frames = getStackFrames(thread);
+			List<IDebugElement> frames = getStackFrames(thread);
 			if (!isDisplayMonitors()) {
 				return frames.toArray();
 			}
@@ -137,10 +138,10 @@ public class JavaThreadContentProvider extends JavaElementContentProvider {
 	 * {@link Category#TEST} and {@link Category#CUSTOM_FILTERED} grouped into {@link GroupedStackFrame}s, those are folded by default, but can be
 	 * expanded on demand by the user.
 	 */
-	private List<Object> getStackFrames(IJavaThread thread) throws DebugException {
-		var frames = thread.getStackFrames();
+	private List<IDebugElement> getStackFrames(IJavaThread thread) throws DebugException {
+		IStackFrame[] frames = thread.getStackFrames();
 		var stackFrameProvider = getStackFrameProvider();
-		var result = new ArrayList<>(frames.length);
+		var result = new ArrayList<IDebugElement>(frames.length);
 		if (!stackFrameProvider.isCollapseStackFrames()) {
 			result.addAll(Arrays.asList(frames));
 			return result;

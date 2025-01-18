@@ -1734,7 +1734,7 @@ public class JDIStackFrame extends JDIDebugElement implements IJavaStackFrame {
 	}
 
 	@Override
-	public Category getCategory() {
+	public synchronized Category getCategory() {
 		if (fCategory == null) {
 			fCategory = JDIDebugPlugin.getDefault().getStackFrameCategorizer().categorize(this);
 		}
