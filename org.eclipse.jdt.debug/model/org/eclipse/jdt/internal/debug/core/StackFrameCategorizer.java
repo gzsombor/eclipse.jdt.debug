@@ -14,9 +14,7 @@
 package org.eclipse.jdt.internal.debug.core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -60,18 +58,12 @@ public class StackFrameCategorizer implements IPreferenceChangeListener {
 
 	private Filters platform;
 	private Filters custom;
-	private final Map<Category, Boolean> enabledCategories;
 	private final IPreferencesService preferenceService;
 	private final IEclipsePreferences instancePreferences;
 
 	public StackFrameCategorizer(IPreferencesService preferenceService, IEclipsePreferences instancePreferences) {
 		this.preferenceService = preferenceService;
 		this.instancePreferences = instancePreferences;
-		enabledCategories = new HashMap<>();
-		for (var category : JDIDebugModel.ALL_CATEGORIES) {
-			boolean enabled = preferenceService.getBoolean(JDIDebugPlugin.getUniqueIdentifier(), getNameOfTheFlagToEnable(category), true, null);
-			enabledCategories.put(category, enabled);
-		}
 
 		platform = createActivePlatformFilters();
 		custom = createActiveCustomFilters();
@@ -180,23 +172,14 @@ public class StackFrameCategorizer implements IPreferenceChangeListener {
 	}
 
 	public boolean isEnabled(Category category) {
-		return Boolean.TRUE.equals(enabledCategories.get(category));
+		return preferenceService.getBoolean(JDIDebugPlugin.getUniqueIdentifier(), getNameOfTheFlagToEnable(category), true, null);
 	}
 
 	private String getNameOfTheFlagToEnable(Category category) {
 		return PREFIX + category.name();
 	}
 
-	private Category getCategoryFromNameOfTheFlag(String flagName) {
-		if (flagName.startsWith(PREFIX)) {
-			String categoryName = flagName.substring(PREFIX.length());
-			return JDIDebugModel.ALL_CATEGORIES.stream().filter(c -> categoryName.equals(c.name())).findAny().orElse(null);
-		}
-		return null;
-	}
-
 	public void setEnabled(Category category, boolean flag) {
-		enabledCategories.put(category, flag);
 		instancePreferences.putBoolean(getNameOfTheFlagToEnable(category), flag);
 	}
 
@@ -224,11 +207,6 @@ public class StackFrameCategorizer implements IPreferenceChangeListener {
 			platform = createActivePlatformFilters();
 		} else if (JDIDebugPlugin.PREF_ACTIVE_CUSTOM_FRAME_FILTER_LIST.equals(prop)) {
 			custom = createActiveCustomFilters();
-		} else {
-			var category = getCategoryFromNameOfTheFlag(prop);
-			if (category != null) {
-				enabledCategories.put(category, (Boolean) event.getNewValue());
-			}
 		}
 	}
 

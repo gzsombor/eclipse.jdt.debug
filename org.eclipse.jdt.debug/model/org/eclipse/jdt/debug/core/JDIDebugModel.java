@@ -14,7 +14,6 @@
 package org.eclipse.jdt.debug.core;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
@@ -34,7 +33,6 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.debug.core.IJavaStackFrame.Category;
 import org.eclipse.jdt.internal.debug.core.JDIDebugPlugin;
 import org.eclipse.jdt.internal.debug.core.JavaDebugUtils;
-import org.eclipse.jdt.internal.debug.core.StackFrameCategorizer;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaClassPrepareBreakpoint;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaExceptionBreakpoint;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaLineBreakpoint;
@@ -199,13 +197,6 @@ public class JDIDebugModel {
 	 * @since 3.22
 	 */
 	public static final Category CATEGORY_UNKNOWN = new Category("UNKNOWN", true); //$NON-NLS-1$
-
-	/**
-	 * All categories used by {@link StackFrameCategorizer}.
-	 *
-	 * @since 3.22
-	 */
-	public static final List<Category> ALL_CATEGORIES = List.of(CATEGORY_CUSTOM_FILTERED, CATEGORY_SYNTHETIC, CATEGORY_PLATFORM, CATEGORY_TEST, CATEGORY_PRODUCTION, CATEGORY_LIBRARY, CATEGORY_UNKNOWN);
 
 	/**
 	 * Not to be instantiated.
