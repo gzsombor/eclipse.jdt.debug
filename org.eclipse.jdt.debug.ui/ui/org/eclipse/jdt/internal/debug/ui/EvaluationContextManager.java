@@ -255,8 +255,7 @@ public class EvaluationContextManager implements IWindowListener, IDebugContextL
 			if (part != null) {
 				IWorkbenchPage page = part.getSite().getPage();
 				ISelection selection = event.getContext();
-				if (selection instanceof IStructuredSelection) {
-					IStructuredSelection ss = (IStructuredSelection)selection;
+				if (selection instanceof IStructuredSelection ss) {
 					if (ss.size() == 1) {
 						Object element = ss.getFirstElement();
 						if (element instanceof IAdaptable) {

@@ -240,19 +240,16 @@ public abstract class AbstractDetailPane implements IDetailPane3 {
 	private IStatusLineManager getStatusLine() {
 		// we want to show messages globally hence we
 		// have to go through the active part
-		if (fSite instanceof IViewSite) {
-			IViewSite site= (IViewSite) fSite;
+		if (fSite instanceof IViewSite site) {
 			IWorkbenchPage page= site.getPage();
 			IWorkbenchPart activePart= page.getActivePart();
 
-			if (activePart instanceof IViewPart) {
-				IViewPart activeViewPart= (IViewPart)activePart;
+			if (activePart instanceof IViewPart activeViewPart) {
 				IViewSite activeViewSite= activeViewPart.getViewSite();
 				return activeViewSite.getActionBars().getStatusLineManager();
 			}
 
-			if (activePart instanceof IEditorPart) {
-				IEditorPart activeEditorPart= (IEditorPart)activePart;
+			if (activePart instanceof IEditorPart activeEditorPart) {
 				IEditorActionBarContributor contributor= activeEditorPart.getEditorSite().getActionBarContributor();
 				if (contributor instanceof EditorActionBarContributor) {
 					return ((EditorActionBarContributor) contributor).getActionBars().getStatusLineManager();

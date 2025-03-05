@@ -62,8 +62,7 @@ public class ExceptionBreakpointEditor extends StandardJavaBreakpointEditor {
 	@Override
 	protected void setBreakpoint(IJavaBreakpoint breakpoint) throws CoreException {
 		super.setBreakpoint(breakpoint);
-		if (breakpoint instanceof IJavaExceptionBreakpoint) {
-			IJavaExceptionBreakpoint ex = (IJavaExceptionBreakpoint) breakpoint;
+		if (breakpoint instanceof IJavaExceptionBreakpoint ex) {
 			fCaught.setEnabled(true);
 			fUncaught.setEnabled(true);
 			fSubclasses.setEnabled(true);
@@ -84,8 +83,7 @@ public class ExceptionBreakpointEditor extends StandardJavaBreakpointEditor {
 	public void doSave() throws CoreException {
 		super.doSave();
 		IJavaBreakpoint breakpoint = getBreakpoint();
-		if (breakpoint instanceof IJavaExceptionBreakpoint) {
-			IJavaExceptionBreakpoint ex = (IJavaExceptionBreakpoint) breakpoint;
+		if (breakpoint instanceof IJavaExceptionBreakpoint ex) {
 			ex.setCaught(fCaught.getSelection());
 			ex.setUncaught(fUncaught.getSelection());
 			((JavaExceptionBreakpoint)ex).setSuspendOnSubclasses(fSubclasses.getSelection());

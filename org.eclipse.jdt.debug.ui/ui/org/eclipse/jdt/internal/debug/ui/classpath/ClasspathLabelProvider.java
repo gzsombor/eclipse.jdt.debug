@@ -32,8 +32,7 @@ public class ClasspathLabelProvider implements ILabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof ClasspathEntry) {
-			ClasspathEntry entry = (ClasspathEntry) element;
+		if (element instanceof ClasspathEntry entry) {
 			return runtimeClasspathLabelProvider.getImage(entry);
 		}
 
@@ -45,8 +44,7 @@ public class ClasspathLabelProvider implements ILabelProvider {
 	 */
 	@Override
 	public String getText(Object element) {
-		if (element instanceof ClasspathEntry) {
-			ClasspathEntry entry = (ClasspathEntry) element;
+		if (element instanceof ClasspathEntry entry) {
 			return runtimeClasspathLabelProvider.getText(entry.getDelegate());
 		}
 		return element.toString();

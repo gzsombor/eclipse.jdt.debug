@@ -57,8 +57,7 @@ public class JavaVariableColumnPresentationFactory implements IColumnPresentatio
 			}
 		}
 		if (IDebugUIConstants.ID_VARIABLE_VIEW.equals(id)) {
-			if (element instanceof IAdaptable) {
-				IAdaptable adaptable = (IAdaptable)element;
+			if (element instanceof IAdaptable adaptable) {
 				frame = adaptable.getAdapter(IJavaStackFrame.class);
 			}
 		}

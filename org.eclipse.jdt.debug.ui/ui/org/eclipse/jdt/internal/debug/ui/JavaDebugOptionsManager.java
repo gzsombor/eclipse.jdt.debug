@@ -268,8 +268,7 @@ public class JavaDebugOptionsManager implements IDebugEventSetListener, IPropert
 	protected void notifyTargets(IBreakpoint breakpoint, int kind) {
 		IDebugTarget[] targets = DebugPlugin.getDefault().getLaunchManager().getDebugTargets();
 		for (int i = 0; i < targets.length; i++) {
-			if (targets[i] instanceof IJavaDebugTarget) {
-				IJavaDebugTarget target = (IJavaDebugTarget)targets[i];
+			if (targets[i] instanceof IJavaDebugTarget target) {
 				notifyTarget(target, breakpoint, kind);
 			}
 		}
@@ -300,8 +299,7 @@ public class JavaDebugOptionsManager implements IDebugEventSetListener, IPropert
 	protected void notifyTargetsOfFilters() {
 		IDebugTarget[] targets = DebugPlugin.getDefault().getLaunchManager().getDebugTargets();
 		for (int i = 0; i < targets.length; i++) {
-			if (targets[i] instanceof IJavaDebugTarget) {
-				IJavaDebugTarget target = (IJavaDebugTarget)targets[i];
+			if (targets[i] instanceof IJavaDebugTarget target) {
 				notifyTargetOfFilters(target);
 			}
 		}
@@ -526,9 +524,7 @@ public class JavaDebugOptionsManager implements IDebugEventSetListener, IPropert
 			DebugEvent event = events[i];
 			if (event.getKind() == DebugEvent.CREATE) {
 				Object source = event.getSource();
-				if (source instanceof IJavaDebugTarget) {
-					IJavaDebugTarget javaTarget = (IJavaDebugTarget)source;
-
+				if (source instanceof IJavaDebugTarget javaTarget) {
 					// compilation breakpoints
 					if (isSuspendOnCompilationErrors()) {
 						notifyTarget(javaTarget, getSuspendOnCompilationErrorBreakpoint(), ADDED);
@@ -745,8 +741,7 @@ public class JavaDebugOptionsManager implements IDebugEventSetListener, IPropert
 	public void breakpointHasRuntimeException(final IJavaLineBreakpoint breakpoint, final DebugException exception) {
 		IStatus status;
 		Throwable wrappedException= exception.getStatus().getException();
-		if (wrappedException instanceof InvocationException) {
-			InvocationException ie= (InvocationException) wrappedException;
+		if (wrappedException instanceof InvocationException ie) {
 			ObjectReference ref= ie.exception();
 			status= new Status(IStatus.ERROR,JDIDebugUIPlugin.getUniqueIdentifier(), IStatus.ERROR, ref.referenceType().name(), null);
 		} else {

@@ -34,8 +34,7 @@ public class JavaStackFrameLabelProvider extends DebugElementLabelProvider {
 	@Override
 	protected void retrieveLabel(ILabelUpdate update) throws CoreException {
 		Object element = update.getElement();
-		if (element instanceof IJavaStackFrame) {
-			IJavaStackFrame frame = (IJavaStackFrame) element;
+		if (element instanceof IJavaStackFrame frame) {
 			if (!frame.getThread().isSuspended()) {
 				update.cancel();
 				return;
@@ -50,8 +49,7 @@ public class JavaStackFrameLabelProvider extends DebugElementLabelProvider {
 	@Override
 	protected ISchedulingRule getRule(ILabelUpdate update) {
 		Object element = update.getElement();
-		if (element instanceof IJavaStackFrame) {
-			IJavaStackFrame frame = (IJavaStackFrame) element;
+		if (element instanceof IJavaStackFrame frame) {
 			return ((JDIThread)frame.getThread()).getThreadRule();
 		}
 		return null;

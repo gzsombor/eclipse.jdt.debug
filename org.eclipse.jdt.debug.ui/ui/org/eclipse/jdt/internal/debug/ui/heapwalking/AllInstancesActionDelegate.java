@@ -134,12 +134,11 @@ public class AllInstancesActionDelegate extends BaseInstanceActionDelegate imple
 					}
 				}
 				// If the element is an IType, get the corresponding java variable from the VM
-				if(selectedElement instanceof IType) {
+				if(selectedElement instanceof IType itype) {
 					IAdaptable adapt = DebugUITools.getDebugContext();
 					if(adapt != null) {
 						IJavaDebugTarget target = adapt.getAdapter(IJavaDebugTarget.class);
 						if(target != null) {
-							IType itype = (IType) selectedElement;
 							IJavaType[] types = target.getJavaTypes(itype.getFullyQualifiedName());
 							if(types != null && types.length > 0) {
 								type = types[0];
@@ -152,8 +151,7 @@ public class AllInstancesActionDelegate extends BaseInstanceActionDelegate imple
 					}
 				}
 				// If the selected element is a java variable, just get the type
-				if (selectedElement instanceof IJavaVariable) {
-					IJavaVariable var = (IJavaVariable) selectedElement;
+				if (selectedElement instanceof IJavaVariable var) {
 					IValue val = var.getValue();
 					if (val instanceof IJavaValue){
 						type = ((IJavaValue)val).getJavaType();
@@ -240,8 +238,7 @@ public class AllInstancesActionDelegate extends BaseInstanceActionDelegate imple
     	IDebugView debugView = getPart().getAdapter(IDebugView.class);
 		if (debugView != null){
 			Control control = debugView.getViewer().getControl();
-			if (control instanceof Tree) {
-				Tree tree = (Tree) control;
+			if (control instanceof Tree tree) {
 				TreeItem[] selection = tree.getSelection();
 				if (selection.length > 0) {
 					Rectangle bounds = selection[0].getBounds();
@@ -262,8 +259,7 @@ public class AllInstancesActionDelegate extends BaseInstanceActionDelegate imple
 	    		}
 	    	}
     	}
-    	if (widget instanceof StyledText){
-			StyledText textWidget = (StyledText)widget;
+    	if (widget instanceof StyledText textWidget){
 			Point docRange = textWidget.getSelectionRange();
 	        int midOffset = docRange.x + (docRange.y / 2);
 	        Point point = textWidget.getLocationAtOffset(midOffset);
@@ -276,8 +272,7 @@ public class AllInstancesActionDelegate extends BaseInstanceActionDelegate imple
 	        point.y += height;
 	        return point;
 		}
-		if (widget instanceof Tree) {
-			Tree tree = (Tree) widget;
+		if (widget instanceof Tree tree) {
 			TreeItem[] selection = tree.getSelection();
 			if (selection.length > 0) {
 				Rectangle bounds = selection[0].getBounds();

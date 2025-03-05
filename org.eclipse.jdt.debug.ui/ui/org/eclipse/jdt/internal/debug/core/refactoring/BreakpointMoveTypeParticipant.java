@@ -51,15 +51,13 @@ public class BreakpointMoveTypeParticipant extends BreakpointMoveParticipant {
 		IPackageFragment destPackage = (IPackageFragment) getDestination();
 		for (IMarker marker : markers) {
 			IBreakpoint breakpoint = getBreakpoint(marker);
-			if (breakpoint instanceof IJavaBreakpoint) {
-				IJavaBreakpoint javaBreakpoint = (IJavaBreakpoint) breakpoint;
+			if (breakpoint instanceof IJavaBreakpoint javaBreakpoint) {
 				IType breakpointType = BreakpointUtils.getType(javaBreakpoint);
 				if (breakpointType != null && isContained(originalType, breakpointType)) {
 					ICompilationUnit cu = destPackage.getCompilationUnit(breakpointType.getCompilationUnit().getElementName());
 					IJavaElement element = BreakpointChange.findElement(cu, breakpointType);
 					if (element != null) {
-						if (element instanceof IType) {
-							IType destType = (IType) element;
+						if (element instanceof IType destType) {
 							changes.add(createTypeChange(javaBreakpoint, destType, breakpointType));
 						}
 					}

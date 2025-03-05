@@ -56,8 +56,7 @@ public abstract class JavaLaunchTab extends AbstractLaunchConfigurationTab {
 		IWorkbenchPage page = JDIDebugUIPlugin.getActivePage();
 		if (page != null) {
 			ISelection selection = page.getSelection();
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection ss = (IStructuredSelection)selection;
+			if (selection instanceof IStructuredSelection ss) {
 				if (!ss.isEmpty()) {
 					Object obj = ss.getFirstElement();
 					if (obj instanceof IJavaElement) {

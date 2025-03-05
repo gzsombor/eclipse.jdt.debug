@@ -88,16 +88,14 @@ public class CurrentValueContext extends CurrentFrameContext {
             unableToResolveType();
         }
         ISelection selection= view.getViewer().getSelection();
-        if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-            IStructuredSelection viewerSelection= (IStructuredSelection)selection;
+        if (!selection.isEmpty() && selection instanceof IStructuredSelection viewerSelection) {
             if (viewerSelection.size() > 1) {
                 unableToResolveType();
             }
             Object element= viewerSelection.getFirstElement();
 
             IValue value= null;
-            if (element instanceof IVariable) {
-                IVariable variable = (IVariable)element;
+            if (element instanceof IVariable variable) {
                 if (!variable.getName().equals("this")) { //$NON-NLS-1$
                 	value= variable.getValue();
                 }

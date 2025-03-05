@@ -33,8 +33,7 @@ public class JavaDebugShowInAdapterFactory implements IAdapterFactory {
 	@SuppressWarnings("unchecked")
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 		if (adapterType == IShowInSource.class) {
-			if (adaptableObject instanceof IJavaStackFrame) {
-				IJavaStackFrame frame = (IJavaStackFrame) adaptableObject;
+			if (adaptableObject instanceof IJavaStackFrame frame) {
 				return (T) new StackFrameShowInSourceAdapter(frame);
 			}
 		}

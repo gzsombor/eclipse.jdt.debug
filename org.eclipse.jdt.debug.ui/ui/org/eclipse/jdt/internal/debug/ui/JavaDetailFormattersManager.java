@@ -143,8 +143,7 @@ public class JavaDetailFormattersManager implements IPropertyChangeListener, IDe
 
 	private void resolveFormatter(final IJavaValue value, final IJavaThread thread, final IValueDetailListener listener) {
 		EvaluationListener evaluationListener = new EvaluationListener(value, thread, listener);
-		if (value instanceof IJavaObject) {
-			IJavaObject objectValue= (IJavaObject) value;
+		if (value instanceof IJavaObject objectValue) {
 			try {
 				if(value instanceof JDIAllInstancesValue) {
 					listener.detailComputed(value, ((JDIAllInstancesValue)value).getDetailString());
@@ -676,8 +675,7 @@ public class JavaDetailFormattersManager implements IPropertyChangeListener, IDe
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof Key) {
-				Key key= (Key) obj;
+			if (obj instanceof Key key) {
 				return fTypeName != null && fDebugTarget != null && fTypeName.equals(key.fTypeName) && fDebugTarget.equals(key.fDebugTarget);
 			}
 			return false;

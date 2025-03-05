@@ -86,8 +86,7 @@ public class BreakpointRenameTypeParticipant extends BreakpointRenameParticipant
 
 		for (IMarker marker : markers) {
 			IBreakpoint breakpoint = getBreakpoint(marker);
-			if (breakpoint instanceof IJavaBreakpoint) {
-				IJavaBreakpoint javaBreakpoint = (IJavaBreakpoint) breakpoint;
+			if (breakpoint instanceof IJavaBreakpoint javaBreakpoint) {
 				IType breakpointType = BreakpointUtils.getType(javaBreakpoint);
 				IType destType = null;
 				if (breakpointType != null) {

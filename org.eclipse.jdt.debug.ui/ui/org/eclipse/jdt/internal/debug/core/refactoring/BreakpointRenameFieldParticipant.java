@@ -71,8 +71,7 @@ public class BreakpointRenameFieldParticipant extends BreakpointRenameParticipan
 		IField originalField = (IField) getOriginalElement();
 		for (IMarker marker : markers) {
 			IBreakpoint breakpoint = getBreakpoint(marker);
-			if (breakpoint instanceof IJavaWatchpoint) {
-				IJavaWatchpoint watchpoint = (IJavaWatchpoint) breakpoint;
+			if (breakpoint instanceof IJavaWatchpoint watchpoint) {
 				if(originalField.getElementName().equals(watchpoint.getFieldName())) {
 					IType breakpointType = BreakpointUtils.getType(watchpoint);
 					if (breakpointType != null && originalField.getDeclaringType().equals(breakpointType)) {

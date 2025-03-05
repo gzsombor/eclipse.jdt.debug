@@ -50,8 +50,7 @@ public class JavaContentProviderFilter {
 			List<Object> keep = new ArrayList<>(variables.length);
 			for (Object variable : variables) {
 				boolean filter = false;
-				if (variable instanceof IJavaVariable) {
-					IJavaVariable var = (IJavaVariable) variable;
+				if (variable instanceof IJavaVariable var) {
 					if (var.isStatic()){
 						if (var.isFinal()){
 							filter = filterConstants;
