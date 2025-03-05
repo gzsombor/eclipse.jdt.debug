@@ -203,10 +203,9 @@ public class BreakpointMarkerUpdater implements IMarkerUpdater {
 		String markerType= JavaLineBreakpoint.getMarkerType();
 		IBreakpointManager manager= DebugPlugin.getDefault().getBreakpointManager();
 		for (IBreakpoint b : manager.getBreakpoints(modelId)) {
-			if (!(b instanceof IJavaLineBreakpoint)) {
+			if (!(b instanceof IJavaLineBreakpoint breakpoint)) {
 				continue;
 			}
-			IJavaLineBreakpoint breakpoint = (IJavaLineBreakpoint) b;
 			IMarker marker = breakpoint.getMarker();
 			if (marker != null && marker.exists() && marker.getType().equals(markerType) && currentmarker.getId() != marker.getId()) {
 				String breakpointTypeName = breakpoint.getTypeName();

@@ -140,8 +140,7 @@ public class AppletLaunchConfigurationUtils {
 			}
 			element= ((IJavaElement)element).getParent();
 		}
-		if (element instanceof ICompilationUnit) {
-			ICompilationUnit cu= (ICompilationUnit)element;
+		if (element instanceof ICompilationUnit cu) {
 			for (IType type : cu.getAllTypes()) {
 				if (isSubclassOfApplet(monitor, type)) {
 					result.add(type);
@@ -152,8 +151,7 @@ public class AppletLaunchConfigurationUtils {
 			if (isSubclassOfApplet(monitor, type)) {
 				result.add(type);
 			}
-		} else if (element instanceof IJavaElement) {
-			IJavaElement parent = (IJavaElement) element;
+		} else if (element instanceof IJavaElement parent) {
 			List<IType> found= searchSubclassesOfApplet(monitor, (IJavaElement)element);
 			// filter within the parent element
 			Iterator<IType> iterator = found.iterator();

@@ -248,8 +248,7 @@ public class InstalledJREsBlock implements IAddVMDialogRequestor, ISelectionProv
 		 */
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof IVMInstall) {
-				IVMInstall vm= (IVMInstall)element;
+			if (element instanceof IVMInstall vm) {
 				switch(columnIndex) {
 					case 0:
 						if (JavaRuntime.isContributedVMInstall(vm.getId())) {
@@ -324,8 +323,7 @@ public class InstalledJREsBlock implements IAddVMDialogRequestor, ISelectionProv
 		}
 
 		boolean isUnmodifiable(Object element) {
-			if(element instanceof IVMInstall) {
-				IVMInstall vm = (IVMInstall) element;
+			if(element instanceof IVMInstall vm) {
 				return JavaRuntime.isContributedVMInstall(vm.getId());
 			}
 			return false;
@@ -627,9 +625,7 @@ public class InstalledJREsBlock implements IAddVMDialogRequestor, ISelectionProv
 		fVMList.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
-				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
-					IVMInstall left= (IVMInstall)e1;
-					IVMInstall right= (IVMInstall)e2;
+				if ((e1 instanceof IVMInstall left) && (e2 instanceof IVMInstall right)) {
 					String leftType= left.getVMInstallType().getName();
 					String rightType= right.getVMInstallType().getName();
 					int res= leftType.compareToIgnoreCase(rightType);
@@ -656,9 +652,7 @@ public class InstalledJREsBlock implements IAddVMDialogRequestor, ISelectionProv
 		fVMList.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
-				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
-					IVMInstall left= (IVMInstall)e1;
-					IVMInstall right= (IVMInstall)e2;
+				if ((e1 instanceof IVMInstall left) && (e2 instanceof IVMInstall right)) {
 					return left.getName().compareToIgnoreCase(right.getName());
 				}
 				return super.compare(viewer, e1, e2);
@@ -679,9 +673,7 @@ public class InstalledJREsBlock implements IAddVMDialogRequestor, ISelectionProv
 		fVMList.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
-				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
-					IVMInstall left= (IVMInstall)e1;
-					IVMInstall right= (IVMInstall)e2;
+				if ((e1 instanceof IVMInstall left) && (e2 instanceof IVMInstall right)) {
 					return left.getInstallLocation().getAbsolutePath().compareToIgnoreCase(right.getInstallLocation().getAbsolutePath());
 				}
 				return super.compare(viewer, e1, e2);
@@ -940,9 +932,8 @@ public class InstalledJREsBlock implements IAddVMDialogRequestor, ISelectionProv
 				}
 				vm.setName(nameCopy);
 				vm.setInstallLocation(location);
-				if (type instanceof AbstractVMInstallType) {
+				if (type instanceof AbstractVMInstallType abs) {
 					//set default java doc location
-					AbstractVMInstallType abs = (AbstractVMInstallType)type;
 					vm.setJavadocLocation(abs.getDefaultJavadocLocation(location));
 					vm.setVMArgs(abs.getDefaultVMArguments(location));
 				}
