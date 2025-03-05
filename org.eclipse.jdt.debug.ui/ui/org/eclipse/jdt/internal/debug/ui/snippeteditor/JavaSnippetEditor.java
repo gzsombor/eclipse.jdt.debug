@@ -877,8 +877,7 @@ public class JavaSnippetEditor extends AbstractDecoratedTextEditor implements ID
 
 
 	protected void showException(Throwable exception) {
-		if (exception instanceof DebugException) {
-			DebugException de = (DebugException)exception;
+		if (exception instanceof DebugException de) {
 			Throwable t= de.getStatus().getException();
 			if (t != null) {
 				// show underlying exception
@@ -905,8 +904,7 @@ public class JavaSnippetEditor extends AbstractDecoratedTextEditor implements ID
 	}
 
 	protected void showUnderlyingException(Throwable t) {
-		if (t instanceof InvocationException) {
-			InvocationException ie= (InvocationException)t;
+		if (t instanceof InvocationException ie) {
 			ObjectReference ref= ie.exception();
 			String eName= ref.referenceType().name();
 			final String message= SnippetMessages.getFormattedString("SnippetEditor.exception", eName); //$NON-NLS-1$
@@ -1089,8 +1087,7 @@ public class JavaSnippetEditor extends AbstractDecoratedTextEditor implements ID
 	public DebugEvent[] filterDebugEvents(DebugEvent[] events) {
 		for (DebugEvent e : events) {
 			Object source = e.getSource();
-			if (source instanceof IDebugElement) {
-				IDebugElement de = (IDebugElement)source;
+			if (source instanceof IDebugElement de) {
 				if (de instanceof IDebugTarget) {
 					if (de.getDebugTarget().equals(this.fVM)) {
 						if (e.getKind() == DebugEvent.TERMINATE) {
@@ -1104,9 +1101,8 @@ public class JavaSnippetEditor extends AbstractDecoratedTextEditor implements ID
 							getShell().getDisplay().asyncExec(r);
 						}
 					}
-				} else if (de instanceof IJavaThread) {
+				} else if (de instanceof IJavaThread jt) {
 					if (e.getKind() == DebugEvent.SUSPEND) {
-						IJavaThread jt = (IJavaThread)de;
 						try {
 							if (jt.equals(getThread()) && e.getDetail() == DebugEvent.EVALUATION) {
 								return null;
@@ -1172,8 +1168,7 @@ public class JavaSnippetEditor extends AbstractDecoratedTextEditor implements ID
 				JDIContentAssistPreference.changeConfiguration((ContentAssistant) assistant, event);
 			}
 			SourceViewerConfiguration configuration = getSourceViewerConfiguration();
-			if (configuration instanceof JavaSourceViewerConfiguration) {
-				JavaSourceViewerConfiguration jsv = (JavaSourceViewerConfiguration) configuration;
+			if (configuration instanceof JavaSourceViewerConfiguration jsv) {
 				if (jsv.affectsTextPresentation(event)) {
 					jsv.handlePropertyChangeEvent(event);
 					isv.invalidateTextPresentation();

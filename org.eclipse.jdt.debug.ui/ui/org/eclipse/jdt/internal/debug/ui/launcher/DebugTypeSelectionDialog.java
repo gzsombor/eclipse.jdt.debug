@@ -81,7 +81,7 @@ public class DebugTypeSelectionDialog extends FilteredItemsSelectionDialog {
 		}
 		@Override
 		public String getText(Object element) {
-			if (element instanceof IType type) {
+			if(element instanceof IType type) {
 				StringBuilder label = new StringBuilder().append(type.getTypeQualifiedName());
 				String container = getDeclaringContainerName(type);
 				if(container != null && !"".equals(container)) { //$NON-NLS-1$
@@ -143,8 +143,7 @@ public class DebugTypeSelectionDialog extends FilteredItemsSelectionDialog {
 	class DebugTypeDetailsLabelProvider extends DebugTypeLabelProvider {
 		@Override
 		public String getText(Object element) {
-			if(element instanceof IType) {
-				IType type = (IType) element;
+			if(element instanceof IType type) {
 				String name = getDeclaringContainerName(type);
 				if(name != null) {
 					if(name.equals(LauncherMessages.MainMethodLabelProvider_0)) {

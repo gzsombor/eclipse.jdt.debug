@@ -143,12 +143,10 @@ public abstract class EvaluateAction implements IEvaluationListener, IWorkbenchW
 				if (a != null) {
 					if (a.getViewer() != null) {
 						ISelection s = a.getViewer().getSelection();
-						if (s instanceof IStructuredSelection) {
-							IStructuredSelection structuredSelection = (IStructuredSelection)s;
+						if (s instanceof IStructuredSelection structuredSelection) {
 							if (structuredSelection.size() == 1) {
 								Object selection= structuredSelection.getFirstElement();
-								if (selection instanceof IJavaVariable) {
-									IJavaVariable var = (IJavaVariable)selection;
+								if (selection instanceof IJavaVariable var) {
 									// if 'this' is selected, use stack frame context
 									try {
 										if (!var.getName().equals("this")) { //$NON-NLS-1$
@@ -246,11 +244,9 @@ public abstract class EvaluateAction implements IEvaluationListener, IWorkbenchW
                         IEvaluationEngine engine = null;
                         try {
                             Object selection= getSelectedObject();
-							if (!(selection instanceof String) || ((String) selection).isEmpty()) {
+							if (!(selection instanceof String expression) || ((String) selection).isEmpty()) {
                                 return;
                             }
-                            String expression= (String)selection;
-
                             engine = JDIDebugPlugin.getDefault().getEvaluationEngine(project, (IJavaDebugTarget)stackFrame.getDebugTarget());
                             setEvaluating(true);
                             boolean hitBreakpoints= Platform.getPreferencesService().getBoolean(
@@ -331,8 +327,7 @@ public abstract class EvaluateAction implements IEvaluationListener, IWorkbenchW
 		Object selectedObject= null;
 		fRegion = null;
 		ISelection selection= getTargetSelection();
-		if (selection instanceof ITextSelection) {
-			ITextSelection ts = (ITextSelection)selection;
+		if (selection instanceof ITextSelection ts) {
 			String text= ts.getText();
 			if (textHasContent(text)) {
 				selectedObject= text;
@@ -343,15 +338,14 @@ public abstract class EvaluateAction implements IEvaluationListener, IWorkbenchW
 					selectedObject = resolveSelectedObjectUsingToken(selectedObject, ts, editor);
 				}
 			}
-		} else if (selection instanceof IStructuredSelection) {
+		} else if (selection instanceof IStructuredSelection ss) {
 			if (!selection.isEmpty()) {
 				if (getTargetPart().getSite().getId().equals(IDebugUIConstants.ID_DEBUG_VIEW)) {
 					//work on the editor selection
 					IEditorPart editor= getTargetPart().getSite().getPage().getActiveEditor();
 					setTargetPart(editor);
 					selection= getTargetSelection();
-					if (selection instanceof ITextSelection) {
-						ITextSelection ts = (ITextSelection)selection;
+					if (selection instanceof ITextSelection ts) {
 						String text= ts.getText();
 						if (textHasContent(text)) {
 							selectedObject= text;
@@ -360,7 +354,6 @@ public abstract class EvaluateAction implements IEvaluationListener, IWorkbenchW
 						}
 					}
 				} else {
-					IStructuredSelection ss= (IStructuredSelection)selection;
 					Iterator<?> elements = ss.iterator();
 					while (elements.hasNext()) {
 						if (!(elements.next() instanceof IJavaVariable)) {
@@ -541,8 +534,7 @@ public abstract class EvaluateAction implements IEvaluationListener, IWorkbenchW
 	}
 
 	public static String getExceptionMessage(Throwable exception) {
-		if (exception instanceof CoreException) {
-			CoreException ce = (CoreException)exception;
+		if (exception instanceof CoreException ce) {
 			Throwable throwable= ce.getStatus().getException();
 			if (throwable instanceof com.sun.jdi.InvocationException) {
 				return getInvocationExceptionMessage((com.sun.jdi.InvocationException)throwable);

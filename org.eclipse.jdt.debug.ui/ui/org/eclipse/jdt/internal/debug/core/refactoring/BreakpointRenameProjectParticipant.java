@@ -58,8 +58,7 @@ public class BreakpointRenameProjectParticipant extends BreakpointRenameParticip
 		IJavaProject destProject = JavaCore.create(project);
 		for (IMarker marker : markers) {
 			IBreakpoint breakpoint = getBreakpoint(marker);
-			if (breakpoint instanceof IJavaBreakpoint) {
-				IJavaBreakpoint javaBreakpoint = (IJavaBreakpoint) breakpoint;
+			if (breakpoint instanceof IJavaBreakpoint javaBreakpoint) {
 				IType breakpointType = BreakpointUtils.getType(javaBreakpoint);
 				if (breakpointType != null) {
 					IPackageFragmentRoot root = (IPackageFragmentRoot) breakpointType.getPackageFragment().getParent();
@@ -83,8 +82,7 @@ public class BreakpointRenameProjectParticipant extends BreakpointRenameParticip
 					}
 					IJavaElement element = BreakpointChange.findElement(parentElement, breakpointType);
 					if (element != null) {
-						if (element instanceof IType) {
-							IType destType = (IType) element;
+						if (element instanceof IType destType) {
 							changes.add(createTypeChange(javaBreakpoint, destType, breakpointType));
 						}
 					}

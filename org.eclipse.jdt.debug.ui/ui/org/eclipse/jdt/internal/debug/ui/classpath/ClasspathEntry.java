@@ -46,8 +46,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements IRuntimeCl
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ClasspathEntry) {
-			ClasspathEntry other= (ClasspathEntry)obj;
+		if (obj instanceof ClasspathEntry other) {
 			if (entry != null) {
 				return entry.equals(other.entry);
 			}
@@ -223,8 +222,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements IRuntimeCl
 
 	public IClasspathEntry[] getChildren(ILaunchConfiguration configuration) {
 		IRuntimeClasspathEntry rpe = getDelegate();
-		if (rpe instanceof IRuntimeClasspathEntry2) {
-			IRuntimeClasspathEntry2 r2 = (IRuntimeClasspathEntry2) rpe;
+		if (rpe instanceof IRuntimeClasspathEntry2 r2) {
 			try {
 				IRuntimeClasspathEntry[] entries = r2.getRuntimeClasspathEntries(configuration);
 				IClasspathEntry[] cps = new IClasspathEntry[entries.length];
