@@ -70,8 +70,7 @@ public class AddVMInstallWizard extends VMInstallWizard {
 	@Override
 	public boolean performFinish() {
 		IWizardPage currentPage = getContainer().getCurrentPage();
-		if (currentPage instanceof AbstractVMInstallPage) {
-			AbstractVMInstallPage page = (AbstractVMInstallPage) currentPage;
+		if (currentPage instanceof AbstractVMInstallPage page) {
 			boolean finish = page.finish();
 			fResult = page.getSelection();
 			return finish;

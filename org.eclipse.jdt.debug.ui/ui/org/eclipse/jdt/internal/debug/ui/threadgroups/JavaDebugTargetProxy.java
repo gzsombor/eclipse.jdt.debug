@@ -134,10 +134,8 @@ public class JavaDebugTargetProxy extends DebugTargetProxy {
 	}
 
 	private int getTargetChildCount(IDebugTarget target) throws DebugException{
-	    if (target instanceof IJavaDebugTarget) {
-	        IJavaDebugTarget javaTarget = (IJavaDebugTarget)target;
-
-            if (JavaElementContentProvider.isDisplayThreadGroups()) {
+	    if (target instanceof IJavaDebugTarget javaTarget) {
+	        if (JavaElementContentProvider.isDisplayThreadGroups()) {
                 if (javaTarget.isDisconnected() || javaTarget.isTerminated()) {
                     return 0;
                 }
@@ -168,8 +166,7 @@ public class JavaDebugTargetProxy extends DebugTargetProxy {
 			@Override
 			public boolean visit(IModelDelta delta, int depth) {
 				Object element = delta.getElement();
-				if (element instanceof IJavaThread) {
-					IJavaThread thread = (IJavaThread) element;
+				if (element instanceof IJavaThread thread) {
 					boolean suspended = thread.isSuspended();
 					if (suspended) {
 						fThreadEventHandler.addSuspendedThread(thread);

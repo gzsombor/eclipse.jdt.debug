@@ -84,8 +84,7 @@ JDIDebugUIPlugin.getUniqueIdentifier(),
 					IWorkbenchPage page = site.getWorkbenchWindow().getActivePage();
 					if (page != null && page.isPartVisible(part)) {
 						ISelection selection = event.getContext();
-						if (selection instanceof IStructuredSelection) {
-							IStructuredSelection ss = (IStructuredSelection) selection;
+						if (selection instanceof IStructuredSelection ss) {
 							if (ss.size() == 1) {
 								Object firstElement = ss.getFirstElement();
 								if (firstElement instanceof IAdaptable) {
@@ -96,8 +95,7 @@ JDIDebugUIPlugin.getUniqueIdentifier(),
 											if (frame.equals(thread.getTopStackFrame())) {
 												IBreakpoint[] breakpoints = thread.getBreakpoints();
 												if (breakpoints.length == 1) {
-													if (breakpoints[0] instanceof IJavaExceptionBreakpoint) {
-														IJavaExceptionBreakpoint exception = (IJavaExceptionBreakpoint) breakpoints[0];
+													if (breakpoints[0] instanceof IJavaExceptionBreakpoint exception) {
 														IJavaObject lastException = ((JavaExceptionBreakpoint)exception).getLastException();
 														if (lastException != null) {
 															IExpression exp = new JavaInspectExpression(exception.getExceptionTypeName(), lastException);

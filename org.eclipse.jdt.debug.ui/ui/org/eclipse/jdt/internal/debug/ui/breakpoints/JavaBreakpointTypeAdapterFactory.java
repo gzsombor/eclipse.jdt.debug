@@ -50,8 +50,7 @@ public class JavaBreakpointTypeAdapterFactory implements IAdapterFactory {
 	@SuppressWarnings("unchecked")
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
         if (adapterType.equals(IBreakpointTypeCategory.class)) {
-            if (adaptableObject instanceof IJavaStratumLineBreakpoint) {
-                IJavaStratumLineBreakpoint stratumBreakpoint = (IJavaStratumLineBreakpoint) adaptableObject;
+            if (adaptableObject instanceof IJavaStratumLineBreakpoint stratumBreakpoint) {
                 try {
                     String stratum = stratumBreakpoint.getStratum();
                     if (stratum == null) {
@@ -83,8 +82,7 @@ public class JavaBreakpointTypeAdapterFactory implements IAdapterFactory {
                 } catch (CoreException e) {
                 }
             }
-            if (adaptableObject instanceof IBreakpoint) {
-            	IBreakpoint breakpoint = (IBreakpoint)adaptableObject;
+            if (adaptableObject instanceof IBreakpoint breakpoint) {
             	String type = DebugPlugin.getDefault().getBreakpointManager().getTypeName(breakpoint);
             	IBreakpointTypeCategory category = fOtherTypes.get(type);
             	if (category == null && type != null) {

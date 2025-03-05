@@ -50,8 +50,7 @@ public class BreakpointRenameMethodParticipant extends BreakpointRenameParticipa
 		IMethod originalMethod = (IMethod) getOriginalElement();
 		for (IMarker marker : markers) {
 			IBreakpoint breakpoint = getBreakpoint(marker);
-			if (breakpoint instanceof IJavaMethodBreakpoint) {
-				IJavaMethodBreakpoint methodBreakpoint = (IJavaMethodBreakpoint) breakpoint;
+			if (breakpoint instanceof IJavaMethodBreakpoint methodBreakpoint) {
 				//ensure we only update the marker that corresponds to the method being renamed
 				//https://bugs.eclipse.org/bugs/show_bug.cgi?id=280518
 				if(methodBreakpoint.getMethodName().equals(originalMethod.getElementName()) &&
