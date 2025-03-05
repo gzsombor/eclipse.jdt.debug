@@ -391,8 +391,7 @@ public class JDIModelPresentation extends LabelProvider implements IDebugModelPr
 					if (exName != null) {
 						args = new String[] { thread.getName(), exName };
 					}
-				} else if (breakpoint instanceof IJavaWatchpoint) {
-					IJavaWatchpoint wp = (IJavaWatchpoint)breakpoint;
+				} else if (breakpoint instanceof IJavaWatchpoint wp) {
 					String fieldName = wp.getFieldName();
 					args = new String[] {thread.getName(), fieldName, typeName};
 					if (wp.isAccessSuspend(thread.getDebugTarget())) {
@@ -400,8 +399,7 @@ public class JDIModelPresentation extends LabelProvider implements IDebugModelPr
 					} else {
 						key.append("_fieldmodification"); //$NON-NLS-1$
 					}
-				} else if (breakpoint instanceof IJavaMethodBreakpoint) {
-					IJavaMethodBreakpoint me= (IJavaMethodBreakpoint)breakpoint;
+				} else if (breakpoint instanceof IJavaMethodBreakpoint me) {
 					String methodName= me.getMethodName();
 					args = new String[] {thread.getName(), methodName, typeName};
 					if (me.isEntrySuspend(thread.getDebugTarget())) {
@@ -409,8 +407,7 @@ public class JDIModelPresentation extends LabelProvider implements IDebugModelPr
 					} else {
 						key.append("_methodexit"); //$NON-NLS-1$
 					}
-				} else if (breakpoint instanceof IJavaLineBreakpoint) {
-					IJavaLineBreakpoint jlbp = (IJavaLineBreakpoint)breakpoint;
+				} else if (breakpoint instanceof IJavaLineBreakpoint jlbp) {
 					int lineNumber= jlbp.getLineNumber();
 					if (lineNumber > -1) {
 						args = new String[] {thread.getName(), String.valueOf(lineNumber), typeName};
@@ -1011,9 +1008,16 @@ public class JDIModelPresentation extends LabelProvider implements IDebugModelPr
 	 */
 	private int computeJDIAdornmentFlags(Object element) {
 		try {
-			if (element instanceof IJavaThread) {
+			if (element instanceof IJavaStackFrame javaStackFrame) {
+				if (javaStackFrame.isOutOfSynch()) {
+					return JDIImageDescriptor.IS_OUT_OF_SYNCH;
+				}
+				if (!javaStackFrame.isObsolete() && javaStackFrame.isSynchronized()) {
+					return JDIImageDescriptor.SYNCHRONIZED;
+				}
+			}
+			if (element instanceof IJavaThread javaThread) {
 				int flag= 0;
-				IJavaThread javaThread = ((IJavaThread)element);
 				if (ThreadMonitorManager.getDefault().isInDeadlock(javaThread)) {
 					flag= JDIImageDescriptor.IN_DEADLOCK;
 				}

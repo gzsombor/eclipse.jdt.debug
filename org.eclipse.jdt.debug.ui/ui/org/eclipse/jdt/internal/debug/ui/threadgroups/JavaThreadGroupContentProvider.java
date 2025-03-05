@@ -32,8 +32,7 @@ public class JavaThreadGroupContentProvider extends JavaElementContentProvider {
 	@Override
 	protected int getChildCount(Object element, IPresentationContext context, IViewerUpdate monitor) throws CoreException {
 		int count = 0;
-		if (element instanceof IJavaThreadGroup) {
-			IJavaThreadGroup group = (IJavaThreadGroup) element;
+		if (element instanceof IJavaThreadGroup group) {
 			if (isAvailable(group)) {
 				count += group.getThreadGroups().length;
 				count += group.getThreads().length;

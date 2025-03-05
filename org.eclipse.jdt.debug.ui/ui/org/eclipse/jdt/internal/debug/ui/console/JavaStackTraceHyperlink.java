@@ -576,8 +576,7 @@ public class JavaStackTraceHyperlink implements IHyperlink {
 			if (editorId != null) {
 				try {
 					IEditorPart editorPart = JDIDebugUIPlugin.getActivePage().openEditor(editorInput, editorId);
-					if (editorPart instanceof ITextEditor && lineNumber >= 0) {
-						ITextEditor textEditor = (ITextEditor) editorPart;
+					if (editorPart instanceof ITextEditor textEditor && lineNumber >= 0) {
 						IDocumentProvider provider = textEditor.getDocumentProvider();
 						provider.connect(editorInput);
 						IDocument document = provider.getDocument(editorInput);
