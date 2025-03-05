@@ -110,8 +110,7 @@ public class JavaVariableLabelProvider extends VariableLabelProvider implements 
 			return result;
 		}
 		var element = elementPath.getLastSegment();
-		if (element instanceof IJavaVariable) {
-			var variable = (IJavaVariable) element;
+		if (element instanceof IJavaVariable variable) {
 			var value = variable.getValue();
 			if (value instanceof IJavaObject && ((IJavaObject) value).getLabel() != null) {
 				return new FontData(result.getName(), result.getHeight(), result.getStyle() ^ SWT.BOLD);

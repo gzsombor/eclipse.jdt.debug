@@ -247,8 +247,7 @@ public class JavaThreadEventHandler extends ThreadEventHandler implements IPrope
 	protected boolean handlesEvent(DebugEvent event) {
 		if (super.handlesEvent(event)) {
 			Object source = event.getSource();
-			if (source instanceof IJavaThread) {
-				IJavaThread thread = (IJavaThread) source;
+			if (source instanceof IJavaThread thread) {
 				ILaunch launch = thread.getLaunch();
 				if (launch != null) {
 					if (launch.getAttribute(ScrapbookLauncher.SCRAPBOOK_LAUNCH) != null) {
@@ -277,8 +276,7 @@ public class JavaThreadEventHandler extends ThreadEventHandler implements IPrope
 	public void treeCollapsed(TreeEvent e) {
 		// when the user collapses a thread, remove it from the 'next thread to select queue'
 		Widget widget = e.item;
-		if (widget instanceof TreeItem) {
-			TreeItem item = (TreeItem) widget;
+		if (widget instanceof TreeItem item) {
 			Object data = item.getData();
 			if (data instanceof IJavaThread) {
 				removeQueuedThread((IJavaThread)data);
@@ -293,8 +291,7 @@ public class JavaThreadEventHandler extends ThreadEventHandler implements IPrope
 	public void treeExpanded(TreeEvent e) {
 		// when the expands a thread, add it back to the 'next thread to select queue'
 		Widget widget = e.item;
-		if (widget instanceof TreeItem) {
-			TreeItem item = (TreeItem) widget;
+		if (widget instanceof TreeItem item) {
 			Object data = item.getData();
 			if (data instanceof IJavaThread) {
 				queueSuspendedThread((IJavaThread)data);
@@ -328,10 +325,9 @@ public class JavaThreadEventHandler extends ThreadEventHandler implements IPrope
 	private boolean isMissingRequiredThreadGroup(DebugEvent event) {
 		if (JavaElementContentProvider.isDisplayThreadGroups()) {
 			Object source = event.getSource();
-			if (source instanceof IJavaThread) {
+			if (source instanceof IJavaThread thread) {
 				// if we can't retrieve a thread group we won't be able to add/remove
 				// the thread from the view (we can't get a path to the thread)
-				IJavaThread thread = (IJavaThread) source;
 				try {
 					if (thread.getThreadGroup() == null) {
 						return true;

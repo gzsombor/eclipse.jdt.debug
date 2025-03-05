@@ -33,8 +33,7 @@ public class JavaVariableCellModifier extends DefaultVariableCellModifier {
     @Override
 	public boolean canModify(Object element, String property) {
         if (IDebugUIConstants.COLUMN_ID_VARIABLE_VALUE.equals(property)) {
-            if (element instanceof IJavaVariable) {
-                IJavaVariable var = (IJavaVariable) element;
+            if (element instanceof IJavaVariable var) {
                 if (var.supportsValueModification()){
 	                try {
 	                    String signature = var.getSignature();
@@ -62,8 +61,7 @@ public class JavaVariableCellModifier extends DefaultVariableCellModifier {
     @Override
 	public Object getValue(Object element, String property) {
         if (IDebugUIConstants.COLUMN_ID_VARIABLE_VALUE.equals(property)) {
-            if (element instanceof IJavaVariable) {
-                IJavaVariable var = (IJavaVariable) element;
+            if (element instanceof IJavaVariable var) {
                 if (isBoolean(var)) {
                     try {
                         if (var.getValue().getValueString().equals(Boolean.toString(true))) {
@@ -83,8 +81,7 @@ public class JavaVariableCellModifier extends DefaultVariableCellModifier {
         Object oldValue = getValue(element, property);
         if (!value.equals(oldValue)) {
             if (IDebugUIConstants.COLUMN_ID_VARIABLE_VALUE.equals(property)) {
-                if (element instanceof IJavaVariable) {
-                    IJavaVariable var = (IJavaVariable) element;
+                if (element instanceof IJavaVariable var) {
                     if (isBoolean(var)) {
                     	if (value instanceof Integer) {
 	                        switch (((Integer) value).intValue()) {

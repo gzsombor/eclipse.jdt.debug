@@ -28,14 +28,12 @@ public class JavaThreadActionFilter implements IActionFilter {
 
 	@Override
 	public boolean testAttribute(Object target, String name, String value) {
-		if (target instanceof IJavaThread) {
+		if (target instanceof IJavaThread thread) {
 			if (name.equals("TerminateEvaluationActionFilter") //$NON-NLS-1$
 				&& value.equals("supportsTerminateEvaluation")) { //$NON-NLS-1$
-				IJavaThread thread = (IJavaThread) target;
 				return thread.isPerformingEvaluation();
 			} else if (name.equals("ExcludeExceptionLocationFilter") //$NON-NLS-1$
 				&& value.equals("suspendedAtException")) { //$NON-NLS-1$
-				IJavaThread thread = (IJavaThread) target;
 				IBreakpoint[] breakpoints= thread.getBreakpoints();
 				for (int i = 0; i < breakpoints.length; i++) {
 					IBreakpoint breakpoint= breakpoints[i];

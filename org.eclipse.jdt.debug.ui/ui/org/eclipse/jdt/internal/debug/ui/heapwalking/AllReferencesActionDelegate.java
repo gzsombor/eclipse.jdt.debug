@@ -72,8 +72,7 @@ public class AllReferencesActionDelegate extends BaseInstanceActionDelegate {
 	 */
     protected static Point getAnchor(IDebugView view) {
 		Control control = view.getViewer().getControl();
-		if (control instanceof Tree) {
-			Tree tree = (Tree) control;
+		if (control instanceof Tree tree) {
 			TreeItem[] selection = tree.getSelection();
 			if (selection.length > 0) {
 				Rectangle bounds = selection[0].getBounds();

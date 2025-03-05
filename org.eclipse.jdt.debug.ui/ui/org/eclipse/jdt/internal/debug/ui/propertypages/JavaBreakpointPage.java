@@ -286,8 +286,7 @@ public class JavaBreakpointPage extends PropertyPage {
 	protected void createTypeSpecificLabels(Composite parent) {
 		// Line number
 		IJavaBreakpoint jb = getBreakpoint();
-		if (jb instanceof IJavaLineBreakpoint) {
-			IJavaLineBreakpoint breakpoint = (IJavaLineBreakpoint) jb;
+		if (jb instanceof IJavaLineBreakpoint breakpoint) {
 			StringBuilder lineNumber = new StringBuilder(4);
 			try {
 				int lNumber = breakpoint.getLineNumber();
