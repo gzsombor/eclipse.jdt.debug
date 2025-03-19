@@ -43,8 +43,7 @@ public class LineBreakpointDetailPane extends AbstractDetailPane {
 	 */
 	@Override
 	protected AbstractJavaBreakpointEditor createEditor(Composite parent) {
-		return new CompositeBreakpointEditor(
-			new AbstractJavaBreakpointEditor[] {new StandardJavaBreakpointEditor(), new JavaBreakpointConditionEditor(null)});
+		return new CompositeBreakpointEditor(new StandardJavaBreakpointEditor(), new JavaBreakpointConditionEditor());
 	}
 
 }

@@ -47,8 +47,7 @@ public class MethodBreakpointDetailPane extends AbstractDetailPane {
 	 */
 	@Override
 	protected AbstractJavaBreakpointEditor createEditor(Composite parent) {
-		return new CompositeBreakpointEditor(new AbstractJavaBreakpointEditor[]
-			{new MethodBreakpointEditor(), new JavaBreakpointConditionEditor(null)});
+		return new CompositeBreakpointEditor(new MethodBreakpointEditor(), new JavaBreakpointConditionEditor());
 	}
 
 }
