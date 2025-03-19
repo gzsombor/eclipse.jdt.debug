@@ -46,7 +46,7 @@ public class WatchpointDetailPane extends AbstractDetailPane {
 	 */
 	@Override
 	protected AbstractJavaBreakpointEditor createEditor(Composite parent) {
-		return new CompositeBreakpointEditor(new AbstractJavaBreakpointEditor[] { new WatchpointEditor(), new JavaBreakpointConditionEditor(null) });
+		return new CompositeBreakpointEditor(new WatchpointEditor(), new JavaBreakpointConditionEditor());
 	}
 
 }
