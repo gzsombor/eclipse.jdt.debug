@@ -31,7 +31,7 @@ public class CompositeBreakpointEditor extends AbstractJavaBreakpointEditor {
 
 	private AbstractJavaBreakpointEditor[] fEditors;
 
-	public CompositeBreakpointEditor(AbstractJavaBreakpointEditor[] editors) {
+	public CompositeBreakpointEditor(AbstractJavaBreakpointEditor... editors) {
 		fEditors = editors;
 	}
 

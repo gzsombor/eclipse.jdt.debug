@@ -334,20 +334,17 @@ public class JavaBreakpointPage extends PropertyPage {
 			fEditor = new StandardJavaBreakpointEditor();
 		} else if (JavaLineBreakpoint.JAVA_LINE_BREAKPOINT.equals(type)) {
 			setTitle(PropertyPageMessages.JavaLineBreakpointPage_18);
-			JavaBreakpointConditionEditor javaBpConditionEditor = new JavaBreakpointConditionEditor(null);
-			fEditor = new CompositeBreakpointEditor(new AbstractJavaBreakpointEditor[]
-			{ new StandardJavaBreakpointEditor(javaBpConditionEditor), javaBpConditionEditor });
+			JavaBreakpointConditionEditor javaBpConditionEditor = new JavaBreakpointConditionEditor();
+			fEditor = new CompositeBreakpointEditor(new StandardJavaBreakpointEditor(javaBpConditionEditor), javaBpConditionEditor);
 		} else if (JavaExceptionBreakpoint.JAVA_EXCEPTION_BREAKPOINT.equals(type)) {
 			setTitle(PropertyPageMessages.JavaExceptionBreakpointPage_5);
 			fEditor = new ExceptionBreakpointEditor();
 		} else if (JavaWatchpoint.JAVA_WATCHPOINT.equals(type)) {
 			setTitle(PropertyPageMessages.JavaLineBreakpointPage_19);
-				fEditor = new CompositeBreakpointEditor(new AbstractJavaBreakpointEditor[] { new WatchpointEditor(),
-						new JavaBreakpointConditionEditor(null) });
+			fEditor = new CompositeBreakpointEditor(new WatchpointEditor(), new JavaBreakpointConditionEditor());
 		} else if (JavaMethodBreakpoint.JAVA_METHOD_BREAKPOINT.equals(type)) {
 			setTitle(PropertyPageMessages.JavaLineBreakpointPage_20);
-			fEditor = new CompositeBreakpointEditor(new AbstractJavaBreakpointEditor[]
-			    {new MethodBreakpointEditor(), new JavaBreakpointConditionEditor(null)});
+			fEditor = new CompositeBreakpointEditor(new MethodBreakpointEditor(), new JavaBreakpointConditionEditor());
 		} else {
 			// use standard editor for any other kind of breakpoint (@see bug 325161)
 			fEditor = new StandardJavaBreakpointEditor();
