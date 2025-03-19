@@ -170,6 +170,7 @@ public final class JavaBreakpointConditionEditor extends AbstractJavaBreakpointE
 	 * Creates a new Java breakpoint condition editor.
 	 */
 	public JavaBreakpointConditionEditor() {
+		this(null);
 	}
 
 	/**
@@ -180,7 +181,8 @@ public final class JavaBreakpointConditionEditor extends AbstractJavaBreakpointE
 	 * @since 3.6
 	 */
 	public JavaBreakpointConditionEditor(IDialogSettings dialogSettings) {
-		fConditionHistoryDialogSettings= dialogSettings != null ? dialogSettings : DialogSettings.getOrCreateSection(JDIDebugUIPlugin.getDefault().getDialogSettings(), DS_SECTION_CONDITION_HISTORY);
+		fConditionHistoryDialogSettings = dialogSettings != null ? dialogSettings
+				: DialogSettings.getOrCreateSection(JDIDebugUIPlugin.getDefault().getDialogSettings(), DS_SECTION_CONDITION_HISTORY);
 	}
 
 	/**
@@ -842,5 +844,4 @@ public final class JavaBreakpointConditionEditor extends AbstractJavaBreakpointE
 			}
 		}
 	}
-
 }
