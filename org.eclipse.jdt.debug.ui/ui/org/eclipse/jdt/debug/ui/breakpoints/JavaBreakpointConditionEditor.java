@@ -356,8 +356,8 @@ public final class JavaBreakpointConditionEditor extends AbstractJavaBreakpointE
 				processMnemonics(PropertyPageMessages.JavaBreakpointConditionEditor_0),
 				null,
 				false,
-				1);
-		fConditional.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+				2);
+		fConditional.setLayoutData(createHorizontalGridData());
 		fConditional.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -366,11 +366,11 @@ public final class JavaBreakpointConditionEditor extends AbstractJavaBreakpointE
 				setDirty(PROP_CONDITION_ENABLED);
 			}
 		});
-		Composite radios = SWTFactory.createComposite(controls, controls.getFont(), 2, 1, GridData.FILL_HORIZONTAL, 0, 0);
+		Composite radios = SWTFactory.createComposite(controls, controls.getFont(), 2, 2, GridData.FILL_HORIZONTAL, 0, 0);
 		fWhenTrue = SWTFactory.createRadioButton(radios, processMnemonics(PropertyPageMessages.JavaBreakpointConditionEditor_1));
-		fWhenTrue.setLayoutData(new GridData());
+		fWhenTrue.setLayoutData(createHorizontalGridData());
 		fWhenChange = SWTFactory.createRadioButton(radios, processMnemonics(PropertyPageMessages.JavaBreakpointConditionEditor_2));
-		fWhenChange.setLayoutData(new GridData());
+		fWhenChange.setLayoutData(createHorizontalGridData());
 		fWhenTrue.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
