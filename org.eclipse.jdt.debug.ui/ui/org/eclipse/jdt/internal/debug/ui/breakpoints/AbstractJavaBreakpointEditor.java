@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.LegacyActionTools;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IPropertyListener;
@@ -191,6 +193,10 @@ public abstract class AbstractJavaBreakpointEditor {
 	 */
 	protected void suppressPropertyChanges(boolean suppress) {
 		fSuppressPropertyChanges = suppress;
+	}
+
+	protected GridData createHorizontalGridData() {
+		return new GridData(SWT.FILL, 0, true, false);
 	}
 
 }

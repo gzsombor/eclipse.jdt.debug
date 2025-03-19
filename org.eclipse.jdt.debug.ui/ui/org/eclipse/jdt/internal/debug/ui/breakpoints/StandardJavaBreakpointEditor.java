@@ -23,10 +23,6 @@ import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.propertypages.PropertyPageMessages;
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -87,8 +83,9 @@ public class StandardJavaBreakpointEditor extends AbstractJavaBreakpointEditor {
 	 *            the parent composite
 	 */
 	protected void createTriggerPointButton(Composite parent) {
-		Composite composite = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, 0, 0, 0);
+		Composite composite = SWTFactory.createComposite(parent, parent.getFont(), 2, 2, GridData.FILL_HORIZONTAL, 0, 0);
 		fTriggerPointButton = createCheckButton(composite, PropertyPageMessages.JavaBreakpointPage_12);
+		fTriggerPointButton.setLayoutData(createHorizontalGridData());
 
 		fTriggerPointButton.setSelection(isTriggerPoint());
 		fTriggerPointButton.addSelectionListener(new SelectionAdapter() {
@@ -102,9 +99,9 @@ public class StandardJavaBreakpointEditor extends AbstractJavaBreakpointEditor {
 	}
 
 	protected Control createStandardControls(Composite parent) {
-		Composite composite = SWTFactory.createComposite(parent, parent.getFont(), 4, 1, 0, 0, 0);
+		Composite composite = SWTFactory.createComposite(parent, parent.getFont(), 2, 2, GridData.FILL_HORIZONTAL, 0, 0);
 		fHitCountButton = SWTFactory.createCheckButton(composite, processMnemonics(PropertyPageMessages.JavaBreakpointPage_4), null, false, 1);
-		fHitCountButton.setLayoutData(new GridData());
+		fHitCountButton.setLayoutData(createHorizontalGridData());
 		fHitCountButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -119,18 +116,13 @@ public class StandardJavaBreakpointEditor extends AbstractJavaBreakpointEditor {
 		fHitCountText = SWTFactory.createSingleText(composite, 1);
 		GridData gd = (GridData) fHitCountText.getLayoutData();
 		gd.minimumWidth = 50;
-		fHitCountText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				setDirty(PROP_HIT_COUNT);
-			}
-		});
-		SWTFactory.createLabel(composite, "", 1); // spacer //$NON-NLS-1$
-		Composite radios = SWTFactory.createComposite(composite, composite.getFont(), 2, 1, GridData.FILL_HORIZONTAL, 0, 0);
-		fSuspendThread = SWTFactory.createRadioButton(radios, processMnemonics(PropertyPageMessages.JavaBreakpointPage_7), 1);
-		fSuspendThread.setLayoutData(new GridData());
-		fSuspendVM = SWTFactory.createRadioButton(radios, processMnemonics(PropertyPageMessages.JavaBreakpointPage_8), 1);
-		fSuspendVM.setLayoutData(new GridData());
+		fHitCountText.addModifyListener(e -> setDirty(PROP_HIT_COUNT));
+
+		Composite radios = SWTFactory.createComposite(composite, composite.getFont(), 2, 2, GridData.FILL_HORIZONTAL, 0, 0);
+		fSuspendThread = SWTFactory.createRadioButton(radios, processMnemonics(PropertyPageMessages.JavaBreakpointPage_7));
+		fSuspendThread.setLayoutData(createHorizontalGridData());
+		fSuspendVM = SWTFactory.createRadioButton(radios, processMnemonics(PropertyPageMessages.JavaBreakpointPage_8));
+		fSuspendVM.setLayoutData(createHorizontalGridData());
 		fSuspendThread.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -143,12 +135,7 @@ public class StandardJavaBreakpointEditor extends AbstractJavaBreakpointEditor {
 				setDirty(PROP_SUSPEND_POLICY);
 			}
 		});
-		composite.addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				dispose();
-			}
-		});
+		composite.addDisposeListener(e -> dispose());
 		return composite;
 	}
 
