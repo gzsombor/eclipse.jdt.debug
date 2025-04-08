@@ -3048,7 +3048,7 @@ public class ASTInstructionCompiler extends ASTVisitor {
 			}
 		}
 
-		if (hasErrors()) {
+		if (hasErrors() || methodBinding == null) {
 			return false;
 		}
 
